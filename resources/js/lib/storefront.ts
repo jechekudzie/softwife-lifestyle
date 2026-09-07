@@ -20,6 +20,8 @@ export type AffirmationLine = {
     slug: string;
     name: string;
     era: string;
+    /** The italic line under the wordmark. Not every line fits "in my soft X era". */
+    phrase: string;
     affirmation: string;
     /** Editorial shot for the hero. */
     hero: string;
@@ -71,6 +73,7 @@ export const LINES: AffirmationLine[] = [
         slug: 'soft-wife',
         name: 'Soft Wife',
         era: 'Wife',
+        phrase: 'in my soft wife era',
         affirmation:
             'In my soft wife era means I don’t chase. I attract. Demure in my presence, mindful in my heart and unbothered, because God already wrote the best plot twist.',
         hero: '/media/soft-wife-choc-lights.jpg',
@@ -86,6 +89,7 @@ export const LINES: AffirmationLine[] = [
         slug: 'soft-mom',
         name: 'Soft Mom',
         era: 'Mom',
+        phrase: 'in my soft mom era',
         affirmation:
             'In my soft mom era because God looked at me and thought me worthy enough to become a mother, to care for His most beautiful creations, to experience the purest form of love.',
         hero: '/media/soft-mom-white-coat.jpg',
@@ -106,6 +110,7 @@ export const LINES: AffirmationLine[] = [
         slug: 'soft-babe',
         name: 'Soft Babe',
         era: 'Babe',
+        phrase: 'in my soft babe era',
         affirmation:
             'I am in my soft babe era because I know my worth, I invest in myself mentally, spiritually and financially, and I keep it cute without competing.',
         hero: '/media/soft-babe-plum-seated.jpg',
@@ -125,6 +130,7 @@ export const LINES: AffirmationLine[] = [
         slug: 'becoming-softwife',
         name: 'Becoming Softwife',
         era: 'Her',
+        phrase: 'becoming her, softly',
         affirmation:
             'I am becoming her. Softer in my seasons, steadier in my faith, and no longer shrinking to make anyone else comfortable.',
         hero: '/media/soft-wife-white-tashas.jpg',

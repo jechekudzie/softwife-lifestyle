@@ -237,7 +237,7 @@ function Hero({ variant }: { variant?: HeroVariant }) {
                                     key={active}
                                     className="sw-era inline-block"
                                 >
-                                    in my soft {line.era.toLowerCase()} era
+                                    {line.phrase}
                                 </span>
                             </p>
                         </div>
