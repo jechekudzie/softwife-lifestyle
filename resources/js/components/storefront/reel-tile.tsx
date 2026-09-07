@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Wordmark } from '@/components/storefront/brand';
+import { Photo } from '@/components/storefront/photo';
 import type { Reel } from '@/lib/storefront';
 
 function usePrefersReducedMotion() {
@@ -104,11 +105,11 @@ export function ReelTile({
                             preload="metadata"
                         />
                     ) : reel.poster ? (
-                        <img
+                        <Photo
                             src={reel.poster}
                             alt={reel.caption}
+                            sizes="(min-width: 1024px) 24vw, 45vw"
                             className="h-full w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.06]"
-                            loading="lazy"
                         />
                     ) : (
                         <div className="absolute inset-0 flex items-center justify-center p-6">

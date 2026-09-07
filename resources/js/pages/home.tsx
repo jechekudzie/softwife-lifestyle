@@ -11,6 +11,7 @@ import {
     SMark,
 } from '@/components/storefront/brand';
 import { StorefrontHeader } from '@/components/storefront/header';
+import { Photo } from '@/components/storefront/photo';
 import { StorefrontFooter } from '@/components/storefront/footer';
 import {
     ProductCard,
@@ -182,10 +183,37 @@ function Hero({ variant }: { variant?: HeroVariant }) {
     const key: HeroVariant = variant ?? line.ground;
     const ground = HERO_GROUNDS[key];
 
+    const usedGrounds = Array.from(
+        new Set<HeroVariant>([...HERO_LINES.map((item) => item.ground), key]),
+    );
+
+    /**
+     * Plates are mounted as they are reached, plus the one coming next so the
+     * crossfade has something to fade to. Mounting all four up front meant the
+     * first view downloaded three photographs nobody had asked to see.
+     */
+    const [mounted, setMounted] = useState<number[]>([0, 1]);
+
+    useEffect(() => {
+        setMounted((current) => {
+            const next = (active + 1) % HERO_LINES.length;
+            const wanted =
+                current.includes(active) && current.includes(next)
+                    ? current
+                    : Array.from(new Set([...current, active, next]));
+
+            return wanted.length === current.length ? current : wanted;
+        });
+    }, [active]);
+
     return (
         <section className="sw-grain relative overflow-hidden lg:h-[100svh] lg:min-h-[42rem]">
-            {/* Grounds are stacked and crossfaded, so gradients can animate. */}
-            {(Object.keys(HERO_GROUNDS) as HeroVariant[]).map((name) => {
+            {/*
+             * Only the grounds actually reachable are rendered. Stacking all
+             * of them meant the unused photographic ground downloaded its
+             * plate on every visit for a layer nobody ever sees.
+             */}
+            {usedGrounds.map((name) => {
                 const item = HERO_GROUNDS[name];
 
                 return (
@@ -361,26 +389,31 @@ function Hero({ variant }: { variant?: HeroVariant }) {
                 {/* Plate. A framed card on the ground, so no seam exists. */}
                 <div className="relative order-1 flex items-center px-6 pt-24 pb-4 sm:px-12 lg:order-2 lg:py-14 lg:pr-14 lg:pl-4">
                     <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.75rem] shadow-[0_40px_80px_-40px_rgba(39,24,20,0.55)] lg:aspect-auto lg:h-full lg:rounded-[2.25rem]">
-                        {HERO_LINES.map((item, index) => (
-                            <img
-                                key={`${item.slug}-${index === active}`}
-                                src={item.hero}
-                                alt={
-                                    index === active
-                                        ? `Wearing the ${item.name} tee`
-                                        : ''
-                                }
-                                aria-hidden={index !== active}
-                                className={
-                                    index === active
-                                        ? 'sw-plate-in absolute inset-0 h-full w-full object-cover'
-                                        : 'absolute inset-0 h-full w-full object-cover opacity-0'
-                                }
-                                style={{ objectPosition: '50% 28%' }}
-                                loading={index === 0 ? 'eager' : 'lazy'}
-                                fetchPriority={index === 0 ? 'high' : 'low'}
-                            />
-                        ))}
+                        {HERO_LINES.map((item, index) =>
+                            !mounted.includes(index) ? null : (
+                                <div
+                                    key={`${item.slug}-${index === active}`}
+                                    aria-hidden={index !== active}
+                                    className={
+                                        index === active
+                                            ? 'sw-plate-in absolute inset-0'
+                                            : 'absolute inset-0 opacity-0'
+                                    }
+                                >
+                                    <Photo
+                                        src={item.hero}
+                                        alt={
+                                            index === active
+                                                ? `Wearing the ${item.name} tee`
+                                                : ''
+                                        }
+                                        sizes="(min-width: 1024px) 52vw, 100vw"
+                                        priority={index === 0}
+                                        className="h-full w-full object-cover"
+                                    />
+                                </div>
+                            ),
+                        )}
                     </div>
 
                     {/* The next line, peeking in like the next print in a stack. */}
@@ -388,13 +421,13 @@ function Hero({ variant }: { variant?: HeroVariant }) {
                         aria-hidden="true"
                         className="pointer-events-none absolute bottom-16 -left-14 hidden w-[34%] max-w-[13rem] rotate-[-5deg] overflow-hidden rounded-[1.25rem] border-[6px] border-white shadow-[0_28px_56px_-26px_rgba(39,24,20,0.55)] xl:block"
                     >
-                        <img
+                        <Photo
                             key={next.slug}
                             src={next.hero}
                             alt=""
+                            sizes="14rem"
+                            widths={[400]}
                             className="sw-plate-in aspect-[4/5] w-full object-cover"
-                            style={{ objectPosition: '50% 26%' }}
-                            loading="lazy"
                         />
                     </div>
                 </div>

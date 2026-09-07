@@ -2,6 +2,7 @@ import { Heart, ShoppingBag } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { AddToBag } from '@/components/storefront/add-to-bag';
 import { Garment, Print } from '@/components/storefront/brand';
+import { Photo } from '@/components/storefront/photo';
 import { formatPrice, type AffirmationLine } from '@/lib/storefront';
 
 /** Adds `sw-in` to every `.sw-reveal` element as it enters the viewport. */
@@ -54,11 +55,11 @@ export function ProductCard({ line }: { line: AffirmationLine }) {
         <article className="group flex h-full flex-col">
             <div className="relative overflow-hidden rounded-[1.25rem] bg-white shadow-[0_26px_50px_-30px_rgba(39,24,20,0.5)]">
                 {line.photo ? (
-                    <img
+                    <Photo
                         src={line.photo}
                         alt={`${line.name} affirmation tee`}
+                        sizes="(min-width: 1280px) 22vw, (min-width: 640px) 45vw, 90vw"
                         className="aspect-[4/5] w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.05]"
-                        loading="lazy"
                     />
                 ) : (
                     <div

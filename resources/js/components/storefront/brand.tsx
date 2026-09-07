@@ -1,9 +1,11 @@
 /**
  * Brand marks and garment silhouettes.
  *
- * The wordmark and monogram are the real SOFTWIFE artwork, drawn as CSS masks
- * so a single transparent PNG can be tinted to any brand colour instead of
- * shipping one file per colourway.
+ * The wordmark and monogram are the real SOFTWIFE artwork, traced to vector
+ * and drawn as CSS masks, so one file tints to any brand colour instead of
+ * shipping one per colourway. Vector rather than raster because these render
+ * from 12 pixels in a tab to half a viewport in the hero: the SVG is a
+ * twelfth the weight of the PNG it replaced and sharp at both.
  */
 
 export type Silhouette = 'tee' | 'hoodie' | 'cap';
@@ -29,8 +31,8 @@ export function Wordmark({
             style={{
                 backgroundColor: color,
                 aspectRatio: '1482 / 178',
-                WebkitMaskImage: 'url(/brand/wordmark-only.png)',
-                maskImage: 'url(/brand/wordmark-only.png)',
+                WebkitMaskImage: 'url(/brand/wordmark-only.svg)',
+                maskImage: 'url(/brand/wordmark-only.svg)',
                 WebkitMaskSize: 'contain',
                 maskSize: 'contain',
                 WebkitMaskRepeat: 'no-repeat',
@@ -106,8 +108,8 @@ export function SMark({
                 backgroundColor: color,
                 aspectRatio: '496 / 511',
                 ...style,
-                WebkitMaskImage: 'url(/brand/s.png)',
-                maskImage: 'url(/brand/s.png)',
+                WebkitMaskImage: 'url(/brand/s.svg)',
+                maskImage: 'url(/brand/s.svg)',
                 WebkitMaskSize: 'contain',
                 maskSize: 'contain',
                 WebkitMaskRepeat: 'no-repeat',
