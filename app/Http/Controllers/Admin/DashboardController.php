@@ -27,6 +27,22 @@ class DashboardController extends Controller
                 'products' => Product::where('is_active', true)->count(),
                 'outOfStock' => ProductVariant::where('is_active', true)->where('stock', 0)->count(),
             ],
+            /** A fortnight of takings, for the overview trace. */
+            'trend' => collect(range(13, 0))
+                ->map(function (int $offset) {
+                    $date = today()->subDays($offset);
+                    $orders = Order::whereNot('status', 'cancelled')
+                        ->whereDate('created_at', $date)
+                        ->get(['total_cents']);
+
+                    return [
+                        'date' => $date->toDateString(),
+                        'label' => $date->format('j M'),
+                        'revenue' => $orders->sum('total_cents') / 100,
+                        'orders' => $orders->count(),
+                    ];
+                })
+                ->values(),
             'recentOrders' => Order::latest('id')->take(8)->get()->map(fn (Order $order) => [
                 'reference' => $order->reference,
                 'customerName' => $order->customer_name,

@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Order;
+use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -45,6 +47,18 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
             ],
+            /** Only computed for the admin area, and only when signed in as one. */
+            'adminAlerts' => fn () => $request->user()?->is_admin
+                ? [
+                    'newOrders' => Order::where('status', 'pending')->count(),
+                    'unpaid' => Order::where('payment_status', 'unpaid')
+                        ->whereNot('status', 'cancelled')
+                        ->count(),
+                    'lowStock' => ProductVariant::where('is_active', true)
+                        ->where('stock', '<=', 3)
+                        ->count(),
+                ]
+                : null,
         ];
     }
 }

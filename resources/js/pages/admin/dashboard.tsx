@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, ArrowRight } from 'lucide-react';
+import { Sparkline, type DailyPoint } from '@/components/admin/charts';
 import AdminLayout from '@/layouts/admin-layout';
 
 type Stats = {
@@ -57,13 +58,16 @@ function Stat({
 
 export default function AdminDashboard({
     stats,
+    trend,
     recentOrders,
     lowStock,
 }: {
     stats: Stats;
+    trend: DailyPoint[];
     recentOrders: RecentOrder[];
     lowStock: LowStock[];
 }) {
+    const fortnight = trend.reduce((sum, day) => sum + day.revenue, 0);
     return (
         <AdminLayout
             title="Overview"
@@ -86,7 +90,30 @@ export default function AdminDashboard({
                 />
             </div>
 
-            <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+            <section className="border-wine/12 mt-8 rounded-2xl border bg-white/60 p-7">
+                <div className="flex flex-wrap items-baseline justify-between gap-4">
+                    <div>
+                        <h2 className="text-[0.6rem] font-semibold tracking-[0.24em] uppercase opacity-45">
+                            Last 14 days
+                        </h2>
+                        <p className="font-display mt-2 text-2xl font-bold tabular-nums">
+                            ${fortnight.toFixed(2)}
+                        </p>
+                    </div>
+                    <Link
+                        href="/admin/analytics"
+                        className="border-wine/25 hover:bg-wine flex items-center gap-2 rounded-full border px-5 py-2.5 text-xs font-semibold transition hover:text-white"
+                    >
+                        See analytics
+                        <ArrowRight className="h-3.5 w-3.5" />
+                    </Link>
+                </div>
+                <div className="mt-5">
+                    <Sparkline data={trend} />
+                </div>
+            </section>
+
+            <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
                 <section>
                     <h2 className="font-display text-lg font-bold">
                         Latest orders

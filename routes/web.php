@@ -1,12 +1,15 @@
 <?php
 
+use App\Http\Controllers\Admin\AnalyticsController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
 use App\Http\Controllers\Admin\FulfilmentController;
 use App\Http\Controllers\Admin\OrderController as AdminOrders;
 use App\Http\Controllers\Admin\ProductController as AdminProducts;
 use App\Http\Controllers\Web\CheckoutController;
 use App\Http\Controllers\Web\OrderController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 Route::inertia('/', 'home')->name('home');
 Route::inertia('shop', 'shop/index')->name('shop');
@@ -25,7 +28,12 @@ foreach (['rose', 'wine', 'brown', 'plum', 'pale', 'photo'] as $variant) {
 }
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::inertia('dashboard', 'dashboard')->name('dashboard');
+    /** Admins run the shop, so send them where the work is. */
+    Route::get('dashboard', function (Request $request) {
+        return $request->user()->is_admin
+            ? redirect()->route('admin.dashboard')
+            : Inertia::render('dashboard');
+    })->name('dashboard');
 });
 
 Route::middleware(['auth', 'verified', 'admin'])
@@ -38,6 +46,8 @@ Route::middleware(['auth', 'verified', 'admin'])
         Route::get('products/{product}', [AdminProducts::class, 'edit'])->name('products.edit');
         Route::put('products/{product}', [AdminProducts::class, 'update'])->name('products.update');
         Route::put('products/{product}/stock', [AdminProducts::class, 'updateStock'])->name('products.stock');
+
+        Route::get('analytics', AnalyticsController::class)->name('analytics');
 
         Route::get('orders', [AdminOrders::class, 'index'])->name('orders.index');
         Route::get('orders/{order}', [AdminOrders::class, 'show'])->name('orders.show');
