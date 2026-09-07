@@ -9,7 +9,7 @@ Route::inertia('shop', 'shop/index')->name('shop');
  * Hero treatment previews, so the visual direction can be compared live.
  * Remove once a direction is chosen.
  */
-foreach (['rose', 'dark', 'brown', 'pale', 'photo'] as $variant) {
+foreach (['rose', 'wine', 'brown', 'plum', 'pale', 'photo'] as $variant) {
     Route::inertia("preview/{$variant}", 'home', ['variant' => $variant])
         ->name("preview.{$variant}");
 }

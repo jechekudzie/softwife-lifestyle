@@ -25,6 +25,8 @@ export type AffirmationLine = {
     affirmation: string;
     /** Editorial shot for the hero. */
     hero: string;
+    /** Hero ground, chosen to echo the garment in `hero`. */
+    ground: 'wine' | 'rose' | 'brown' | 'plum' | 'pale';
     /** Product shot for the catalogue card, or null when none exists yet. */
     photo: string | null;
     /** The colourway the photo actually pictures. */
@@ -77,6 +79,7 @@ export const LINES: AffirmationLine[] = [
         affirmation:
             'In my soft wife era means I don’t chase. I attract. Demure in my presence, mindful in my heart and unbothered, because God already wrote the best plot twist.',
         hero: '/media/soft-wife-choc-lights.jpg',
+        ground: 'brown',
         photo: '/media/soft-wife-choc-affirmation.jpg',
         pictured: 'Chocolate · butter print',
         field: 'var(--color-bone)',
@@ -93,6 +96,7 @@ export const LINES: AffirmationLine[] = [
         affirmation:
             'In my soft mom era because God looked at me and thought me worthy enough to become a mother, to care for His most beautiful creations, to experience the purest form of love.',
         hero: '/media/soft-mom-white-coat.jpg',
+        ground: 'wine',
         photo: '/media/soft-mom-white-seated.jpg',
         pictured: 'Bone · burgundy print',
         field: 'var(--color-petal-deep)',
@@ -114,6 +118,7 @@ export const LINES: AffirmationLine[] = [
         affirmation:
             'I am in my soft babe era because I know my worth, I invest in myself mentally, spiritually and financially, and I keep it cute without competing.',
         hero: '/media/soft-babe-plum-seated.jpg',
+        ground: 'plum',
         photo: '/media/soft-babe-plum-standing.jpg',
         pictured: 'Plum · white print',
         field: 'var(--color-petal)',
@@ -134,6 +139,7 @@ export const LINES: AffirmationLine[] = [
         affirmation:
             'I am becoming her. Softer in my seasons, steadier in my faith, and no longer shrinking to make anyone else comfortable.',
         hero: '/media/soft-wife-white-tashas.jpg',
+        ground: 'pale',
         photo: '/media/soft-babe-plum-table.jpg',
         pictured: 'Plum · white print',
         field: 'var(--color-butter)',

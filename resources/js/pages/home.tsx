@@ -43,7 +43,7 @@ function usePrefersReducedMotion() {
     return reduced;
 }
 
-export type HeroVariant = 'rose' | 'dark' | 'brown' | 'pale' | 'photo';
+export type HeroVariant = 'rose' | 'wine' | 'brown' | 'plum' | 'pale' | 'photo';
 
 type Ground = {
     layer: string;
@@ -66,7 +66,7 @@ type Ground = {
  * so each era arrives in its own colour.
  */
 const HERO_GROUNDS: Record<HeroVariant, Ground> = {
-    dark: {
+    wine: {
         layer: 'radial-gradient(120% 110% at 8% 0%, #7d2a44 0%, #6b2137 38%, #55172c 74%, #3d0f20 100%)',
         mark: 'var(--color-butter)',
         body: 'rgba(242, 231, 183, 0.72)',
@@ -91,6 +91,19 @@ const HERO_GROUNDS: Record<HeroVariant, Ground> = {
         primaryBg: 'var(--color-wine)',
         primaryText: '#ffffff',
         secondaryText: 'var(--color-wine)',
+    },
+    plum: {
+        layer: 'radial-gradient(122% 112% at 8% 0%, #6d3062 0%, #5a2450 38%, #451a3e 76%, #30112b 100%)',
+        mark: 'var(--color-butter)',
+        body: 'rgba(242, 231, 183, 0.70)',
+        rule: 'var(--color-butter)',
+        watermark: 'var(--color-butter)',
+        watermarkOpacity: 0.07,
+        glowA: 'var(--color-magenta)',
+        glowB: 'var(--color-rose)',
+        primaryBg: 'var(--color-butter)',
+        primaryText: '#45193d',
+        secondaryText: 'var(--color-butter)',
     },
     brown: {
         layer: 'radial-gradient(125% 115% at 10% 0%, #4a3125 0%, #37261b 40%, #2b1c14 76%, #1e130d 100%)',
@@ -134,9 +147,6 @@ const HERO_GROUNDS: Record<HeroVariant, Ground> = {
     },
 };
 
-/** The order the homepage travels through, one ground per line. */
-const GROUND_ORDER: HeroVariant[] = ['dark', 'rose', 'brown', 'pale'];
-
 const INK_TRANSITION =
     'color 900ms ease, background-color 900ms ease, border-color 900ms ease';
 
@@ -160,8 +170,8 @@ function Hero({ variant }: { variant?: HeroVariant }) {
 
     const line = LINES[active];
     const next = LINES[(active + 1) % LINES.length];
-    // A preview route locks one ground; the homepage travels through them.
-    const key = variant ?? GROUND_ORDER[active % GROUND_ORDER.length];
+    // A preview route locks one ground; otherwise it follows the garment.
+    const key: HeroVariant = variant ?? line.ground;
     const ground = HERO_GROUNDS[key];
 
     return (
