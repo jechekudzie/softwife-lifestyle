@@ -57,4 +57,10 @@ class UserFactory extends Factory
             'two_factor_confirmed_at' => now(),
         ]);
     }
+
+    /** A user who may reach the admin area. */
+    public function admin(): static
+    {
+        return $this->state(fn () => ['is_admin' => true]);
+    }
 }

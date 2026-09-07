@@ -18,6 +18,9 @@ void createInertiaApp({
         switch (true) {
             case STOREFRONT_PAGES.includes(name):
             case name.startsWith('shop/'):
+            // The admin brings its own chrome.
+            case name.startsWith('admin/'):
+            case name === 'admin/dashboard':
                 return null;
             case name.startsWith('auth/'):
                 return AuthLayout;
