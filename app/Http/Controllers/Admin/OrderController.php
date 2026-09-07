@@ -24,12 +24,19 @@ class OrderController extends Controller
 
         $orders = Order::query()
             ->when($status !== '', fn ($query) => $query->where('status', $status))
-            ->when($search !== '', fn ($query) => $query->where(
-                fn ($inner) => $inner
-                    ->where('reference', 'like', "%{$search}%")
-                    ->orWhere('customer_name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%")
-            ))
+            ->when($search !== '', function ($query) use ($search) {
+                /**
+                 * Lowercased on both sides: `like` is case-sensitive on
+                 * PostgreSQL, so searching "tendai" would otherwise miss
+                 * "Tendai Moyo" in production while working locally.
+                 */
+                $term = '%'.mb_strtolower($search).'%';
+
+                $query->where(fn ($inner) => $inner
+                    ->whereRaw('lower(reference) like ?', [$term])
+                    ->orWhereRaw('lower(customer_name) like ?', [$term])
+                    ->orWhereRaw('lower(email) like ?', [$term]));
+            })
             ->latest('id')
             ->paginate(20)
             ->withQueryString();

@@ -60,6 +60,17 @@ class OrderManagementTest extends TestCase
             ->assertDontSee('Tendai Moyo');
     }
 
+    public function test_searching_ignores_case(): void
+    {
+        Order::factory()->create(['customer_name' => 'Tendai Moyo']);
+        Order::factory()->create(['customer_name' => 'Someone Else']);
+
+        $this->get(route('admin.orders.index', ['search' => 'tendai']))
+            ->assertOk()
+            ->assertSee('Tendai Moyo')
+            ->assertDontSee('Someone Else');
+    }
+
     public function test_orders_can_be_searched_by_reference(): void
     {
         $found = Order::factory()->create(['customer_name' => 'Chiedza Rusike']);
