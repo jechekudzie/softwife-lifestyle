@@ -15,16 +15,22 @@ import {
     ProductCard,
     useRevealOnEnter,
 } from '@/components/storefront/product-card';
-import { ReelTile } from '@/components/storefront/reel-tile';
+import {
+    InlineReel,
+    ReelLightbox,
+    ReelTile,
+} from '@/components/storefront/reel-tile';
 import {
     AFFIRMATIONS,
     CATEGORIES,
     LINES,
     MANIFESTO,
+    MANIFESTO_REEL,
     REELS,
     REVIEWS,
     RIBBON,
     RITUAL,
+    type Reel,
 } from '@/lib/storefront';
 
 function usePrefersReducedMotion() {
@@ -528,7 +534,13 @@ function Categories() {
 }
 
 /** Vertical reel tiles — the lifestyle itself, not a campaign film. */
-function Lifestyle() {
+function Lifestyle({
+    onOpenReel,
+    reelsPaused,
+}: {
+    onOpenReel: (index: number) => void;
+    reelsPaused: boolean;
+}) {
     return (
         <section id="lifestyle" className="bg-petal px-6 py-24 sm:py-32">
             <div className="mx-auto max-w-6xl">
@@ -551,7 +563,11 @@ function Lifestyle() {
                             className="sw-reveal"
                             style={{ transitionDelay: `${index * 80}ms` }}
                         >
-                            <ReelTile reel={reel} />
+                            <ReelTile
+                                reel={reel}
+                                onOpen={() => onOpenReel(index)}
+                                paused={reelsPaused}
+                            />
                         </li>
                     ))}
                 </ul>
@@ -561,17 +577,23 @@ function Lifestyle() {
 }
 
 /** The brand in its own words — faith, femininity, intentional living. */
-function Manifesto() {
+function Manifesto({
+    onOpenReel,
+    reelsPaused,
+}: {
+    onOpenReel: () => void;
+    reelsPaused: boolean;
+}) {
     return (
         <section id="story" className="bg-bone px-6 py-24 sm:py-32">
             <div className="mx-auto grid max-w-6xl items-center gap-14 lg:grid-cols-2 lg:gap-20">
                 <div className="sw-reveal mx-auto w-full max-w-sm">
                     <Polaroid caption="Est. 2025">
-                        <img
-                            src="/media/soft-babe-plum-table.jpg"
-                            alt="Wearing the Soft Babe tee"
-                            className="aspect-[4/5] w-full object-cover"
-                            loading="lazy"
+                        <InlineReel
+                            reel={MANIFESTO_REEL}
+                            onOpen={onOpenReel}
+                            paused={reelsPaused}
+                            className="aspect-[4/5]"
                         />
                     </Polaroid>
                 </div>
@@ -731,6 +753,10 @@ const FOOTER_LINKS = [
 
 export default function Home({ variant }: { variant?: HeroVariant }) {
     const [landed, setLanded] = useState(false);
+    const [lightbox, setLightbox] = useState<{
+        reels: Reel[];
+        index: number;
+    } | null>(null);
 
     useRevealOnEnter();
 
@@ -755,7 +781,12 @@ export default function Home({ variant }: { variant?: HeroVariant }) {
 
                 <Ribbon />
 
-                <Manifesto />
+                <Manifesto
+                    onOpenReel={() =>
+                        setLightbox({ reels: [MANIFESTO_REEL], index: 0 })
+                    }
+                    reelsPaused={lightbox !== null}
+                />
 
                 <BestSellers />
 
@@ -765,7 +796,10 @@ export default function Home({ variant }: { variant?: HeroVariant }) {
 
                 <Reviews />
 
-                <Lifestyle />
+                <Lifestyle
+                    onOpenReel={(index) => setLightbox({ reels: REELS, index })}
+                    reelsPaused={lightbox !== null}
+                />
 
                 <Scallop fill="var(--color-magenta)" />
 
@@ -884,6 +918,19 @@ export default function Home({ variant }: { variant?: HeroVariant }) {
                     </div>
                 </footer>
             </div>
+
+            {lightbox ? (
+                <ReelLightbox
+                    reels={lightbox.reels}
+                    index={lightbox.index}
+                    onClose={() => setLightbox(null)}
+                    onMove={(index) =>
+                        setLightbox((current) =>
+                            current ? { ...current, index } : current,
+                        )
+                    }
+                />
+            ) : null}
         </>
     );
 }

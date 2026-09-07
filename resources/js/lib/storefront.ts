@@ -198,11 +198,11 @@ export const REELS: Reel[] = [
         ink: BUTTER,
     },
     {
-        caption: 'Coffee run, soft wife era',
-        poster: '/media/reels/soft-wife-coffee-run.jpg',
-        src: '/media/reels/soft-wife-coffee-run.mp4',
-        cloth: CHOC,
-        ink: BUTTER,
+        caption: 'Sunday outfit of the day',
+        poster: '/media/soft-wife-white-street.jpg',
+        src: null,
+        cloth: BONE,
+        ink: CHOC,
     },
     {
         caption: 'Choosing her scent, unhurried',
@@ -219,6 +219,15 @@ export const REELS: Reel[] = [
         ink: BUTTER,
     },
 ];
+
+/** The clip that plays inside the manifesto polaroid. */
+export const MANIFESTO_REEL: Reel = {
+    caption: 'Coffee run, soft wife era',
+    poster: '/media/reels/soft-wife-coffee-run.jpg',
+    src: '/media/reels/soft-wife-coffee-run.mp4',
+    cloth: CHOC,
+    ink: BUTTER,
+};
 
 export const SIZES = ['XS', 'S', 'M', 'L', 'XL', '2XL'];
 
