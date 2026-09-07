@@ -250,14 +250,14 @@ export default function Cart() {
                                         </p>
                                     ) : null}
 
-                                    <button
-                                        type="button"
-                                        className="bg-wine hover:bg-wine-soft mt-6 w-full rounded-full py-4 text-sm font-semibold text-white transition focus-visible:ring-4 focus-visible:ring-[var(--color-rose)] focus-visible:outline-none"
+                                    <a
+                                        href="/checkout"
+                                        className="bg-wine hover:bg-wine-soft mt-6 block w-full rounded-full py-4 text-center text-sm font-semibold text-white transition focus-visible:ring-4 focus-visible:ring-[var(--color-rose)] focus-visible:outline-none"
                                     >
                                         Checkout
-                                    </button>
+                                    </a>
                                     <p className="mt-3 text-center text-xs opacity-45">
-                                        Payment methods coming soon.
+                                        Collection or delivery, chosen next.
                                     </p>
                                 </div>
                             </aside>

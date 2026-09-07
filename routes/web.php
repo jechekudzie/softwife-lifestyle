@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 Route::inertia('/', 'home')->name('home');
 Route::inertia('shop', 'shop/index')->name('shop');
 Route::inertia('cart', 'cart')->name('cart');
+Route::inertia('checkout', 'checkout')->name('checkout');
 
 /*
  * Hero treatment previews, so the visual direction can be compared live.

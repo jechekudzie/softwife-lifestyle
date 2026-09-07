@@ -10,7 +10,7 @@ import SettingsLayout from '@/layouts/settings/layout';
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 /** Public storefront pages render without the authenticated app chrome. */
-const STOREFRONT_PAGES = ['home', 'welcome', 'cart'];
+const STOREFRONT_PAGES = ['home', 'welcome', 'cart', 'checkout'];
 
 void createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
