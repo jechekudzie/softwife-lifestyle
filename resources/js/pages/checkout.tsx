@@ -3,17 +3,9 @@ import { Check, PenLine, Store, Truck } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Lockup, Script } from '@/components/storefront/brand';
 import { StorefrontHeader } from '@/components/storefront/header';
-import { CUSTOM_LEAD_TIME, unitPrice, useCart } from '@/lib/cart';
-import {
-    COLLECTION_POINTS,
-    DELIVERY_ZONES,
-    deliveryFee,
-    FREE_DELIVERY_FROM,
-    PAYMENT_METHODS,
-    pointById,
-    zoneById,
-    type Fulfilment,
-} from '@/lib/checkout';
+import { router } from '@inertiajs/react';
+import { unitPrice, useCart } from '@/lib/cart';
+import { PAYMENT_METHODS, type Fulfilment } from '@/lib/checkout';
 import { formatPrice } from '@/lib/storefront';
 
 function Field({
@@ -80,15 +72,47 @@ function Section({
     );
 }
 
-export default function Checkout() {
+type Zone = {
+    slug: string;
+    name: string;
+    detail: string | null;
+    fee: number;
+    eta: string | null;
+};
+
+type Point = {
+    slug: string;
+    name: string;
+    address: string;
+    hours: string | null;
+};
+
+type Shop = {
+    currency: string;
+    customFee: number;
+    customLeadTime: string;
+    freeDeliveryFrom: number;
+};
+
+export default function Checkout({
+    zones,
+    points,
+    shop,
+}: {
+    zones: Zone[];
+    points: Point[];
+    shop: Shop;
+}) {
     const { items, subtotal, count, customCount } = useCart();
+    const [submitting, setSubmitting] = useState(false);
+    const [errors, setErrors] = useState<Record<string, string>>({});
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [fulfilment, setFulfilment] = useState<Fulfilment>({
         method: 'delivery',
-        zoneId: DELIVERY_ZONES[0].id,
+        zoneId: zones[0]?.slug ?? '',
     });
     const [address, setAddress] = useState('');
     const [suburb, setSuburb] = useState('');
@@ -96,18 +120,25 @@ export default function Checkout() {
     const [notes, setNotes] = useState('');
     const [payment, setPayment] = useState(PAYMENT_METHODS[0].id);
 
-    const fee = useMemo(
-        () => deliveryFee(fulfilment, subtotal),
-        [fulfilment, subtotal],
-    );
-    const total = subtotal + fee;
-
     const zone =
-        fulfilment.method === 'delivery' ? zoneById(fulfilment.zoneId) : null;
+        fulfilment.method === 'delivery'
+            ? (zones.find((item) => item.slug === fulfilment.zoneId) ?? null)
+            : null;
     const point =
         fulfilment.method === 'collection'
-            ? pointById(fulfilment.pointId)
+            ? (points.find((item) => item.slug === fulfilment.pointId) ?? null)
             : null;
+
+    // Shown live, then recomputed on the server before anything is stored.
+    const fee = useMemo(() => {
+        if (!zone || subtotal >= shop.freeDeliveryFrom) {
+            return 0;
+        }
+
+        return zone.fee;
+    }, [zone, subtotal, shop.freeDeliveryFrom]);
+
+    const total = subtotal + fee;
 
     const contactReady =
         name.trim().length > 1 &&
@@ -118,7 +149,47 @@ export default function Checkout() {
         (address.trim().length > 3 && city.trim().length > 1);
     const ready = items.length > 0 && contactReady && addressReady;
 
-    const shortfall = Math.max(0, FREE_DELIVERY_FROM - subtotal);
+    const shortfall = Math.max(0, shop.freeDeliveryFrom - subtotal);
+
+    const submit = () => {
+        if (!ready || submitting) {
+            return;
+        }
+
+        setSubmitting(true);
+
+        router.post(
+            '/checkout',
+            {
+                customer_name: name,
+                email,
+                phone,
+                fulfilment_method: fulfilment.method,
+                delivery_zone:
+                    fulfilment.method === 'delivery' ? fulfilment.zoneId : null,
+                collection_point:
+                    fulfilment.method === 'collection'
+                        ? fulfilment.pointId
+                        : null,
+                address_line: fulfilment.method === 'delivery' ? address : null,
+                suburb: fulfilment.method === 'delivery' ? suburb : null,
+                city: fulfilment.method === 'delivery' ? city : null,
+                notes: notes || null,
+                payment_method: payment,
+                items: items.map((item) => ({
+                    product: item.slug,
+                    colourway: item.colourway,
+                    size: item.size,
+                    quantity: item.quantity,
+                    custom: item.custom,
+                })),
+            },
+            {
+                onError: (bag) => setErrors(bag as Record<string, string>),
+                onFinish: () => setSubmitting(false),
+            },
+        );
+    };
 
     if (!items.length) {
         return (
@@ -219,8 +290,7 @@ export default function Checkout() {
                                         onClick={() =>
                                             setFulfilment({
                                                 method: 'collection',
-                                                pointId:
-                                                    COLLECTION_POINTS[0].id,
+                                                pointId: points[0]?.slug ?? '',
                                             })
                                         }
                                         aria-pressed={
@@ -246,7 +316,7 @@ export default function Checkout() {
                                         onClick={() =>
                                             setFulfilment({
                                                 method: 'delivery',
-                                                zoneId: DELIVERY_ZONES[0].id,
+                                                zoneId: zones[0]?.slug ?? '',
                                             })
                                         }
                                         aria-pressed={
@@ -264,35 +334,36 @@ export default function Checkout() {
                                         </span>
                                         <span className="mt-1.5 block text-xs opacity-60">
                                             From {formatPrice(5)}, free over{' '}
-                                            {formatPrice(FREE_DELIVERY_FROM)}.
+                                            {formatPrice(shop.freeDeliveryFrom)}
+                                            .
                                         </span>
                                     </button>
                                 </div>
 
                                 {fulfilment.method === 'collection' ? (
                                     <ul className="mt-6 space-y-3">
-                                        {COLLECTION_POINTS.map((option) => (
-                                            <li key={option.id}>
+                                        {points.map((option) => (
+                                            <li key={option.slug}>
                                                 <label className="border-wine/15 flex cursor-pointer items-start gap-3 rounded-2xl border p-5">
                                                     <input
                                                         type="radio"
                                                         name="point"
                                                         checked={
                                                             fulfilment.pointId ===
-                                                            option.id
+                                                            option.slug
                                                         }
                                                         onChange={() =>
                                                             setFulfilment({
                                                                 method: 'collection',
                                                                 pointId:
-                                                                    option.id,
+                                                                    option.slug,
                                                             })
                                                         }
                                                         className="accent-wine mt-1"
                                                     />
                                                     <span>
                                                         <span className="block text-sm font-semibold">
-                                                            {option.label}
+                                                            {option.name}
                                                         </span>
                                                         <span className="mt-1 block text-xs opacity-60">
                                                             {option.address}
@@ -308,12 +379,12 @@ export default function Checkout() {
                                 ) : (
                                     <>
                                         <ul className="mt-6 space-y-3">
-                                            {DELIVERY_ZONES.map((option) => (
-                                                <li key={option.id}>
+                                            {zones.map((option) => (
+                                                <li key={option.slug}>
                                                     <label
                                                         className={`flex cursor-pointer items-start gap-3 rounded-2xl border p-5 transition ${
                                                             fulfilment.zoneId ===
-                                                            option.id
+                                                            option.slug
                                                                 ? 'border-wine bg-petal/50'
                                                                 : 'border-wine/15 hover:border-wine/40'
                                                         }`}
@@ -323,12 +394,12 @@ export default function Checkout() {
                                                             name="zone"
                                                             checked={
                                                                 fulfilment.zoneId ===
-                                                                option.id
+                                                                option.slug
                                                             }
                                                             onChange={() =>
                                                                 setFulfilment({
                                                                     method: 'delivery',
-                                                                    zoneId: option.id,
+                                                                    zoneId: option.slug,
                                                                 })
                                                             }
                                                             className="accent-wine mt-1"
@@ -337,12 +408,12 @@ export default function Checkout() {
                                                             <span className="flex items-baseline justify-between gap-4">
                                                                 <span className="text-sm font-semibold">
                                                                     {
-                                                                        option.label
+                                                                        option.name
                                                                     }
                                                                 </span>
                                                                 <span className="text-sm tabular-nums">
                                                                     {subtotal >=
-                                                                    FREE_DELIVERY_FROM
+                                                                    shop.freeDeliveryFrom
                                                                         ? 'Free'
                                                                         : formatPrice(
                                                                               option.fee,
@@ -537,14 +608,14 @@ export default function Checkout() {
                                 {zone ? (
                                     <p className="mt-4 flex items-start gap-2 text-xs opacity-55">
                                         <Truck className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-                                        {zone.label} · arrives in {zone.eta}
+                                        {zone.name} · arrives in {zone.eta}
                                     </p>
                                 ) : null}
 
                                 {point ? (
                                     <p className="mt-4 flex items-start gap-2 text-xs opacity-55">
                                         <Store className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-                                        {point.label} · {point.hours}
+                                        {point.name} · {point.hours}
                                     </p>
                                 ) : null}
 
@@ -555,18 +626,29 @@ export default function Checkout() {
                                             ? 'piece is'
                                             : 'pieces are'}{' '}
                                         printed to order, adding{' '}
-                                        {CUSTOM_LEAD_TIME}.
+                                        {shop.customLeadTime}.
                                     </p>
                                 ) : null}
 
                                 <button
                                     type="button"
-                                    disabled={!ready}
+                                    onClick={submit}
+                                    disabled={!ready || submitting}
                                     className="bg-wine hover:bg-wine-soft mt-6 flex w-full items-center justify-center gap-2 rounded-full py-4 text-sm font-semibold text-white transition focus-visible:ring-4 focus-visible:ring-[var(--color-rose)] focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-40"
                                 >
                                     <Check className="h-4 w-4" />
-                                    Place order
+                                    {submitting ? 'Placing…' : 'Place order'}
                                 </button>
+
+                                {Object.keys(errors).length ? (
+                                    <ul className="text-magenta mt-4 space-y-1 text-xs">
+                                        {Object.values(errors).map(
+                                            (message) => (
+                                                <li key={message}>{message}</li>
+                                            ),
+                                        )}
+                                    </ul>
+                                ) : null}
 
                                 <p className="mt-3 text-center text-xs opacity-45">
                                     {ready

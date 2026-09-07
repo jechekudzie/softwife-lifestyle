@@ -1,11 +1,15 @@
 <?php
 
+use App\Http\Controllers\Web\CheckoutController;
+use App\Http\Controllers\Web\OrderController;
 use Illuminate\Support\Facades\Route;
 
 Route::inertia('/', 'home')->name('home');
 Route::inertia('shop', 'shop/index')->name('shop');
 Route::inertia('cart', 'cart')->name('cart');
-Route::inertia('checkout', 'checkout')->name('checkout');
+Route::get('checkout', [CheckoutController::class, 'index'])->name('checkout');
+Route::post('checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+Route::get('orders/{order}', [OrderController::class, 'show'])->name('orders.show');
 
 /*
  * Hero treatment previews, so the visual direction can be compared live.
