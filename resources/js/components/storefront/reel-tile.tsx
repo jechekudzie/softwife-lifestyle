@@ -172,11 +172,15 @@ export function InlineReel({
     onOpen,
     paused,
     className = '',
+    soundOn = false,
+    onToggleSound,
 }: {
     reel: Reel;
     onOpen: () => void;
     paused: boolean;
     className?: string;
+    soundOn?: boolean;
+    onToggleSound?: () => void;
 }) {
     const video = useRef<HTMLVideoElement>(null);
     const frame = useRef<HTMLButtonElement>(null);
@@ -215,32 +219,56 @@ export function InlineReel({
     }, [onScreen, paused, reduced]);
 
     return (
-        <button
-            ref={frame}
-            type="button"
-            onClick={onOpen}
-            className={`group relative block w-full cursor-pointer overflow-hidden focus-visible:ring-4 focus-visible:ring-[var(--color-rose)] focus-visible:outline-none ${className}`}
-        >
-            <video
-                ref={video}
-                className="h-full w-full object-cover"
-                src={reel.src ?? undefined}
-                poster={reel.poster ?? undefined}
-                muted
-                loop
-                playsInline
-                preload="metadata"
-            />
-            <span
-                aria-hidden="true"
-                className="absolute inset-0 flex items-center justify-center bg-[rgba(39,24,20,0.25)] opacity-0 transition duration-300 group-hover:opacity-100"
+        <div className={`relative ${className}`}>
+            <button
+                ref={frame}
+                type="button"
+                onClick={onOpen}
+                className="group block h-full w-full cursor-pointer overflow-hidden focus-visible:ring-4 focus-visible:ring-[var(--color-rose)] focus-visible:outline-none"
             >
-                <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white/25 text-white backdrop-blur-sm">
-                    <Expand className="h-5 w-5" />
+                <video
+                    ref={video}
+                    className="h-full w-full object-cover"
+                    src={reel.src ?? undefined}
+                    poster={reel.poster ?? undefined}
+                    muted={!soundOn}
+                    loop
+                    playsInline
+                    preload="metadata"
+                />
+                <span
+                    aria-hidden="true"
+                    className="absolute inset-0 flex items-center justify-center bg-[rgba(39,24,20,0.25)] opacity-0 transition duration-300 group-hover:opacity-100"
+                >
+                    <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white/25 text-white backdrop-blur-sm">
+                        <Expand className="h-5 w-5" />
+                    </span>
                 </span>
-            </span>
-            <span className="sr-only">Open {reel.caption}</span>
-        </button>
+                <span className="sr-only">Open {reel.caption}</span>
+            </button>
+
+            {onToggleSound ? (
+                <button
+                    type="button"
+                    onClick={onToggleSound}
+                    aria-pressed={soundOn}
+                    className={`absolute right-3 bottom-3 flex h-10 w-10 items-center justify-center rounded-full text-white backdrop-blur-sm transition focus-visible:ring-4 focus-visible:ring-white/70 focus-visible:outline-none ${
+                        soundOn
+                            ? 'bg-white/40'
+                            : 'bg-[rgba(39,24,20,0.45)] hover:bg-[rgba(39,24,20,0.65)]'
+                    }`}
+                >
+                    {soundOn ? (
+                        <Volume2 className="h-4 w-4" />
+                    ) : (
+                        <VolumeX className="h-4 w-4" />
+                    )}
+                    <span className="sr-only">
+                        {soundOn ? 'Mute' : 'Play sound for'} {reel.caption}
+                    </span>
+                </button>
+            ) : null}
+        </div>
     );
 }
 

@@ -538,12 +538,14 @@ function Categories() {
 function Lifestyle({
     onOpenReel,
     reelsPaused,
+    audible,
+    onToggleSound,
 }: {
     onOpenReel: (index: number) => void;
     reelsPaused: boolean;
+    audible: string | null;
+    onToggleSound: (key: string) => void;
 }) {
-    // Only one reel may carry sound, or the wall talks over itself.
-    const [audible, setAudible] = useState<number | null>(null);
     return (
         <section id="lifestyle" className="bg-petal px-6 py-24 sm:py-32">
             <div className="mx-auto max-w-6xl">
@@ -570,11 +572,11 @@ function Lifestyle({
                                 reel={reel}
                                 onOpen={() => onOpenReel(index)}
                                 paused={reelsPaused}
-                                soundOn={audible === index && !reelsPaused}
+                                soundOn={
+                                    audible === `reel-${index}` && !reelsPaused
+                                }
                                 onToggleSound={() =>
-                                    setAudible((current) =>
-                                        current === index ? null : index,
-                                    )
+                                    onToggleSound(`reel-${index}`)
                                 }
                             />
                         </li>
@@ -589,9 +591,13 @@ function Lifestyle({
 function Manifesto({
     onOpenReel,
     reelsPaused,
+    soundOn,
+    onToggleSound,
 }: {
     onOpenReel: () => void;
     reelsPaused: boolean;
+    soundOn: boolean;
+    onToggleSound: () => void;
 }) {
     return (
         <section id="story" className="bg-bone px-6 py-24 sm:py-32">
@@ -603,6 +609,8 @@ function Manifesto({
                             onOpen={onOpenReel}
                             paused={reelsPaused}
                             className="aspect-[4/5]"
+                            soundOn={soundOn}
+                            onToggleSound={onToggleSound}
                         />
                     </Polaroid>
                 </div>
@@ -766,6 +774,11 @@ export default function Home({ variant }: { variant?: HeroVariant }) {
         reels: Reel[];
         index: number;
     } | null>(null);
+    // Only one clip anywhere on the page may carry sound.
+    const [audible, setAudible] = useState<string | null>(null);
+
+    const toggleSound = (key: string) =>
+        setAudible((current) => (current === key ? null : key));
 
     useRevealOnEnter();
 
@@ -795,6 +808,8 @@ export default function Home({ variant }: { variant?: HeroVariant }) {
                         setLightbox({ reels: [MANIFESTO_REEL], index: 0 })
                     }
                     reelsPaused={lightbox !== null}
+                    soundOn={audible === 'manifesto' && lightbox === null}
+                    onToggleSound={() => toggleSound('manifesto')}
                 />
 
                 <BestSellers />
@@ -808,6 +823,8 @@ export default function Home({ variant }: { variant?: HeroVariant }) {
                 <Lifestyle
                     onOpenReel={(index) => setLightbox({ reels: REELS, index })}
                     reelsPaused={lightbox !== null}
+                    audible={audible}
+                    onToggleSound={toggleSound}
                 />
 
                 <Scallop fill="var(--color-magenta)" />

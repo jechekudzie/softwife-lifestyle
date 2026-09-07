@@ -1,5 +1,6 @@
 import { Heart, ShoppingBag } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { AddToBag } from '@/components/storefront/add-to-bag';
 import { Garment, Print } from '@/components/storefront/brand';
 import { formatPrice, type AffirmationLine } from '@/lib/storefront';
 
@@ -46,6 +47,7 @@ export function useRevealOnEnter() {
 export function ProductCard({ line }: { line: AffirmationLine }) {
     const [colourway, setColourway] = useState(0);
     const [saved, setSaved] = useState(false);
+    const [adding, setAdding] = useState(false);
     const active = line.colourways[colourway];
 
     return (
@@ -112,7 +114,8 @@ export function ProductCard({ line }: { line: AffirmationLine }) {
 
                 <button
                     type="button"
-                    className="bg-wine absolute right-4 bottom-4 flex h-11 w-11 items-center justify-center rounded-full text-white opacity-0 transition duration-300 group-hover:opacity-100 focus-visible:opacity-100 focus-visible:ring-4 focus-visible:ring-white/60 focus-visible:outline-none"
+                    onClick={() => setAdding(true)}
+                    className="bg-wine hover:bg-wine-soft absolute right-4 bottom-4 flex h-11 w-11 items-center justify-center rounded-full text-white opacity-0 transition duration-300 group-hover:opacity-100 focus-visible:opacity-100 focus-visible:ring-4 focus-visible:ring-white/60 focus-visible:outline-none"
                 >
                     <ShoppingBag className="h-4 w-4" />
                     <span className="sr-only">Add {line.name} to bag</span>
@@ -174,7 +177,19 @@ export function ProductCard({ line }: { line: AffirmationLine }) {
                         {line.colourways.length}
                     </li>
                 </ul>
+
+                <button
+                    type="button"
+                    onClick={() => setAdding(true)}
+                    className="border-wine/25 hover:bg-wine mt-5 w-full rounded-full border py-3 text-sm font-semibold transition duration-300 hover:text-white focus-visible:ring-4 focus-visible:ring-[var(--color-rose)] focus-visible:outline-none"
+                >
+                    Choose your size
+                </button>
             </div>
+
+            {adding ? (
+                <AddToBag line={line} onClose={() => setAdding(false)} />
+            ) : null}
         </article>
     );
 }

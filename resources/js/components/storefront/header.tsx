@@ -7,7 +7,9 @@ import {
     X,
 } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { BagDropdown } from '@/components/storefront/bag-dropdown';
 import { SMark, Wordmark } from '@/components/storefront/brand';
+import { useCart } from '@/lib/cart';
 import { formatPrice, LINES } from '@/lib/storefront';
 
 /**
@@ -188,14 +190,14 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
 
 export function StorefrontHeader({
     current,
-    bagCount = 0,
     shadow = true,
 }: {
     current?: 'shop' | 'lifestyle' | 'affirmations';
-    bagCount?: number;
     shadow?: boolean;
 }) {
     const [searchOpen, setSearchOpen] = useState(false);
+    const [bagOpen, setBagOpen] = useState(false);
+    const { count } = useCart();
 
     return (
         <>
@@ -253,7 +255,7 @@ export function StorefrontHeader({
                         ))}
                     </nav>
 
-                    <div className="flex shrink-0 items-center gap-0.5 sm:gap-1">
+                    <div className="relative flex shrink-0 items-center gap-0.5 sm:gap-1">
                         <button
                             type="button"
                             onClick={() => setSearchOpen(true)}
@@ -266,12 +268,18 @@ export function StorefrontHeader({
                         </button>
                         <button
                             type="button"
+                            onClick={() => setBagOpen((open) => !open)}
+                            aria-expanded={bagOpen}
                             className="bg-wine hover:bg-wine-soft flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-semibold text-white transition focus-visible:ring-4 focus-visible:ring-[var(--color-rose)] focus-visible:outline-none sm:gap-2 sm:px-4"
                         >
                             <ShoppingBag className="h-4 w-4" />
-                            <span className="tabular-nums">{bagCount}</span>
+                            <span className="tabular-nums">{count}</span>
                             <span className="sr-only">items in your bag</span>
                         </button>
+
+                        {bagOpen ? (
+                            <BagDropdown onClose={() => setBagOpen(false)} />
+                        ) : null}
                     </div>
                 </div>
             </header>
