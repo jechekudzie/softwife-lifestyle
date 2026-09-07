@@ -1,0 +1,379 @@
+@import 'tailwindcss';
+
+@import 'tw-animate-css';
+
+@source '../views';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+    --font-sans:
+        'Archivo', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+        'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --font-script: 'Style Script', 'Snell Roundhand', cursive;
+
+    /* SOFTWIFE brand palette, sampled from the product and packaging. */
+    --color-choc: #271814;
+    --color-choc-soft: #37261b;
+    --color-choc-line: #4a3529;
+    --color-butter: #f2e7b7;
+    --color-butter-deep: #e4d296;
+    --color-magenta: #ce3c84;
+    --color-magenta-deep: #a82c68;
+    --color-blush: #ea7fb0;
+    --color-bone: #fbf9f4;
+    --color-plum: #5a2450;
+    --color-wine: #6b2137;
+    --color-wine-deep: #4e1627;
+    --color-wine-soft: #8a2e48;
+    --color-rose: #e6a9c1;
+    --color-rose-deep: #d98fac;
+    --color-petal: #fdeef4;
+    --color-petal-deep: #f9d9e6;
+
+    --radius-lg: var(--radius);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-sm: calc(var(--radius) - 4px);
+
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+
+    --color-destructive: var(--destructive);
+    --color-destructive-foreground: var(--destructive-foreground);
+
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+
+    --color-chart-1: var(--chart-1);
+    --color-chart-2: var(--chart-2);
+    --color-chart-3: var(--chart-3);
+    --color-chart-4: var(--chart-4);
+    --color-chart-5: var(--chart-5);
+
+    --color-sidebar: var(--sidebar);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.145 0 0);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.145 0 0);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.145 0 0);
+    --primary: oklch(0.205 0 0);
+    --primary-foreground: oklch(0.985 0 0);
+    --secondary: oklch(0.97 0 0);
+    --secondary-foreground: oklch(0.205 0 0);
+    --muted: oklch(0.97 0 0);
+    --muted-foreground: oklch(0.556 0 0);
+    --accent: oklch(0.97 0 0);
+    --accent-foreground: oklch(0.205 0 0);
+    --destructive: oklch(0.577 0.245 27.325);
+    --destructive-foreground: oklch(0.577 0.245 27.325);
+    --border: oklch(0.922 0 0);
+    --input: oklch(0.922 0 0);
+    --ring: oklch(0.87 0 0);
+    --chart-1: oklch(0.646 0.222 41.116);
+    --chart-2: oklch(0.6 0.118 184.704);
+    --chart-3: oklch(0.398 0.07 227.392);
+    --chart-4: oklch(0.828 0.189 84.429);
+    --chart-5: oklch(0.769 0.188 70.08);
+    --radius: 0.625rem;
+    --sidebar: oklch(0.985 0 0);
+    --sidebar-foreground: oklch(0.145 0 0);
+    --sidebar-primary: oklch(0.205 0 0);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.97 0 0);
+    --sidebar-accent-foreground: oklch(0.205 0 0);
+    --sidebar-border: oklch(0.922 0 0);
+    --sidebar-ring: oklch(0.87 0 0);
+}
+
+.dark {
+    --background: oklch(0.145 0 0);
+    --foreground: oklch(0.985 0 0);
+    --card: oklch(0.145 0 0);
+    --card-foreground: oklch(0.985 0 0);
+    --popover: oklch(0.145 0 0);
+    --popover-foreground: oklch(0.985 0 0);
+    --primary: oklch(0.985 0 0);
+    --primary-foreground: oklch(0.205 0 0);
+    --secondary: oklch(0.269 0 0);
+    --secondary-foreground: oklch(0.985 0 0);
+    --muted: oklch(0.269 0 0);
+    --muted-foreground: oklch(0.708 0 0);
+    --accent: oklch(0.269 0 0);
+    --accent-foreground: oklch(0.985 0 0);
+    --destructive: oklch(0.396 0.141 25.723);
+    --destructive-foreground: oklch(0.637 0.237 25.331);
+    --border: oklch(0.269 0 0);
+    --input: oklch(0.269 0 0);
+    --ring: oklch(0.439 0 0);
+    --chart-1: oklch(0.488 0.243 264.376);
+    --chart-2: oklch(0.696 0.17 162.48);
+    --chart-3: oklch(0.769 0.188 70.08);
+    --chart-4: oklch(0.627 0.265 303.9);
+    --chart-5: oklch(0.645 0.246 16.439);
+    --sidebar: oklch(0.205 0 0);
+    --sidebar-foreground: oklch(0.985 0 0);
+    --sidebar-primary: oklch(0.985 0 0);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.269 0 0);
+    --sidebar-accent-foreground: oklch(0.985 0 0);
+    --sidebar-border: oklch(0.269 0 0);
+    --sidebar-ring: oklch(0.439 0 0);
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+
+    body {
+        @apply bg-background text-foreground;
+    }
+}
+
+/* --- Softwife storefront motion -------------------------------------- */
+
+@keyframes sw-marquee {
+    from {
+        transform: translate3d(0, 0, 0);
+    }
+    to {
+        transform: translate3d(-50%, 0, 0);
+    }
+}
+
+@keyframes sw-era-in {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 0.9em, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes sw-cue {
+    0% {
+        transform: scaleY(0);
+        transform-origin: top;
+    }
+    45% {
+        transform: scaleY(1);
+        transform-origin: top;
+    }
+    55% {
+        transform: scaleY(1);
+        transform-origin: bottom;
+    }
+    100% {
+        transform: scaleY(0);
+        transform-origin: bottom;
+    }
+}
+
+@keyframes sw-sway {
+    0%,
+    100% {
+        transform: rotate(-1.4deg);
+    }
+    50% {
+        transform: rotate(1.4deg);
+    }
+}
+
+.sw-marquee-track {
+    animation: sw-marquee 34s linear infinite;
+}
+
+.sw-era {
+    animation: sw-era-in 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.sw-cue {
+    animation: sw-cue 2.6s cubic-bezier(0.7, 0, 0.3, 1) infinite;
+}
+
+/* Paper grain, matching the speckled ground of the brand's own artwork. */
+.sw-grain::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.32;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+}
+
+.sw-sway {
+    animation: sw-sway 7s ease-in-out infinite;
+}
+
+/* Reveal-on-enter, driven by IntersectionObserver adding .sw-in. */
+.sw-reveal {
+    opacity: 0;
+    transform: translate3d(0, 1.75rem, 0);
+    transition:
+        opacity 780ms cubic-bezier(0.22, 1, 0.36, 1),
+        transform 780ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sw-reveal.sw-in {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sw-marquee-track,
+    .sw-era,
+    .sw-sway,
+    .sw-cue {
+        animation: none;
+    }
+
+    .sw-reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+}
+
+@keyframes sw-rise {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 2.5rem, 0) scale(0.965);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+}
+
+@keyframes sw-drift {
+    0%,
+    100% {
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+    50% {
+        transform: translate3d(3vw, -4vh, 0) scale(1.12);
+    }
+}
+
+.sw-rise {
+    animation: sw-rise 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.sw-blob {
+    animation: sw-drift 22s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sw-rise,
+    .sw-blob {
+        animation: none;
+    }
+}
+
+@keyframes sw-kenburns {
+    from {
+        transform: scale(1.04) translate3d(0, 0, 0);
+    }
+    to {
+        transform: scale(1.14) translate3d(0, -1.5%, 0);
+    }
+}
+
+.sw-kenburns {
+    animation: sw-kenburns 16s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sw-kenburns {
+        animation: none;
+        transform: scale(1.04);
+    }
+}
+
+/* Story-style progress on the hero's line strip. */
+@keyframes sw-progress {
+    from {
+        transform: scaleX(0);
+    }
+    to {
+        transform: scaleX(1);
+    }
+}
+
+.sw-progress {
+    transform-origin: left;
+    animation: sw-progress 6s linear forwards;
+}
+
+.sw-progress[data-paused='true'] {
+    animation-play-state: paused;
+}
+
+/* Cinematic plate change: the incoming frame settles rather than blinks. */
+@keyframes sw-plate-in {
+    from {
+        opacity: 0;
+        transform: scale(1.06);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.sw-plate-in {
+    animation: sw-plate-in 1200ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sw-progress,
+    .sw-plate-in {
+        animation: none;
+    }
+
+    .sw-progress {
+        transform: scaleX(1);
+    }
+}
+
+/* The overlay supplies its own clear affordance. */
+input[type='search']::-webkit-search-cancel-button,
+input[type='search']::-webkit-search-decoration {
+    -webkit-appearance: none;
+    appearance: none;
+}
