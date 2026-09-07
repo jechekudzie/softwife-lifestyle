@@ -10,6 +10,10 @@ import AdminLayout from '@/layouts/admin-layout';
 
 type Headline = {
     revenue: number;
+    cost: number;
+    profit: number;
+    margin: number | null;
+    costCoverage: number | null;
     orders: number;
     averageOrder: number;
     units: number;
@@ -132,6 +136,23 @@ export default function Analytics({
                                 No earlier window to compare
                             </span>
                         )
+                    }
+                />
+                <Stat
+                    label="Profit"
+                    value={`$${headline.profit.toFixed(2)}`}
+                    hint={
+                        headline.costCoverage !== null &&
+                        headline.costCoverage < 100 ? (
+                            <span className="text-magenta">
+                                Costs known for {headline.costCoverage}% of
+                                pieces sold
+                            </span>
+                        ) : headline.margin !== null ? (
+                            <span className="opacity-45">
+                                {headline.margin}% margin after landed cost
+                            </span>
+                        ) : null
                     }
                 />
                 <Stat label="Orders" value={String(headline.orders)} />

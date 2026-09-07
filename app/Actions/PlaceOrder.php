@@ -8,6 +8,8 @@ use App\Models\DeliveryZone;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use App\Models\StockMovement;
+use App\Support\StockCosting;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -20,6 +22,8 @@ use Illuminate\Validation\ValidationException;
  */
 class PlaceOrder
 {
+    public function __construct(private StockCosting $costing) {}
+
     /**
      * @param  array{
      *     customer_name: string, email: string, phone: string,
@@ -35,6 +39,7 @@ class PlaceOrder
 
         return DB::transaction(function () use ($data, $customFee) {
             $lines = [];
+            $movements = [];
             $subtotal = 0;
 
             foreach ($data['items'] as $index => $row) {
@@ -71,6 +76,12 @@ class PlaceOrder
                 $subtotal += $total;
 
                 $variant->decrement('stock', $row['quantity']);
+                $movements[] = [
+                    'variant_id' => $variant->id,
+                    'quantity' => -$row['quantity'],
+                    // Snapshotted now, so a later batch never rewrites margin.
+                    'unit_cost_cents' => $this->costing->averageCostCents($variant),
+                ];
 
                 $lines[] = [
                     'product_id' => $product->id,
@@ -120,6 +131,16 @@ class PlaceOrder
             ]);
 
             $order->items()->createMany($lines);
+
+            foreach ($movements as $movement) {
+                StockMovement::create([
+                    'product_variant_id' => $movement['variant_id'],
+                    'order_id' => $order->id,
+                    'quantity' => $movement['quantity'],
+                    'unit_cost_cents' => $movement['unit_cost_cents'],
+                    'reason' => StockMovement::REASON_SALE,
+                ]);
+            }
 
             return $order->load('items', 'deliveryZone', 'collectionPoint');
         });

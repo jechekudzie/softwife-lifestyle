@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\ReceiveStockBatch;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Colourway;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use App\Models\StockBatch;
+use App\Models\StockMovement;
+use App\Models\Supplier;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -61,21 +66,33 @@ class ProductController extends Controller
                 'isActive' => $product->is_active,
             ],
             'categories' => Category::orderBy('position')->get(['id', 'name']),
-            'variants' => ProductVariant::with('colourway:id,name')
-                ->where('product_id', $product->id)
-                ->get()
-                ->sortBy([['colourway.name', 'asc'], ['size', 'asc']])
-                ->values()
-                ->map(fn (ProductVariant $variant) => [
-                    'id' => $variant->id,
-                    'colourway' => $variant->colourway->name,
-                    'size' => $variant->size,
-                    'sku' => $variant->sku,
-                    'stock' => $variant->stock,
-                    'isActive' => $variant->is_active,
-                ]),
             'grounds' => ['wine', 'rose', 'brown', 'plum', 'pale'],
-            'allColourways' => Colourway::orderBy('position')->get(['id', 'name']),
+            'sizes' => config('shop.sizes'),
+            'rows' => $this->stockMatrix($product),
+            'suppliers' => Supplier::active()->get(['id', 'name']),
+            'batches' => $product->batches()
+                ->with('receivedBy:id,name', 'supplier:id,name')
+                ->withSum('movements as received', 'quantity')
+                ->latest('received_on')
+                ->take(8)
+                ->get()
+                ->map(fn (StockBatch $batch) => [
+                    'id' => $batch->id,
+                    'reference' => $batch->reference,
+                    'receivedOn' => $batch->received_on->format('j M Y'),
+                    'received' => (int) ($batch->received ?? 0),
+                    'unitCost' => $batch->unit_cost_cents
+                        ? $batch->unit_cost_cents / 100
+                        : null,
+                    'landedUnitCost' => $batch->landedUnitCostCents() !== null
+                        ? $batch->landedUnitCostCents() / 100
+                        : null,
+                    'supplier' => $batch->supplier?->name,
+                    'by' => $batch->receivedBy?->name,
+                    'note' => $batch->note,
+                ]),
+            'allColourways' => Colourway::orderBy('position')
+                ->get(['id', 'name', 'cloth', 'ink']),
             'selectedColourways' => $product->colourways->pluck('id'),
         ]);
     }
@@ -124,9 +141,115 @@ class ProductController extends Controller
                     ->mapWithKeys(fn ($id, $index) => [$id => ['position' => $index]])
                     ->all(),
             );
+
+            $this->syncVariants($product);
         }
 
         return back()->with('success', "{$product->name} saved.");
+    }
+
+    /**
+     * Gives every offered colourway a row per size to hold stock, and retires
+     * the rows for colourways no longer offered. Retiring rather than deleting
+     * keeps the stock figure if the colourway comes back.
+     */
+    private function syncVariants(Product $product): void
+    {
+        $offered = $product->colourways()->pluck('colourways.id');
+
+        foreach ($offered as $colourwayId) {
+            foreach (config('shop.sizes') as $size) {
+                ProductVariant::firstOrCreate(
+                    [
+                        'product_id' => $product->id,
+                        'colourway_id' => $colourwayId,
+                        'size' => $size,
+                    ],
+                    [
+                        'sku' => Str::upper(
+                            Str::slug($product->slug).'-'.$colourwayId.'-'.$size
+                        ),
+                        'stock' => 0,
+                    ],
+                );
+            }
+        }
+
+        ProductVariant::where('product_id', $product->id)
+            ->whereNotIn('colourway_id', $offered)
+            ->update(['is_active' => false]);
+
+        ProductVariant::where('product_id', $product->id)
+            ->whereIn('colourway_id', $offered)
+            ->update(['is_active' => true]);
+    }
+
+    /**
+     * One row per colourway, with a cell per size. Listing every colourway and
+     * size as its own row turns a six-by-six grid into thirty-six lines.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    private function stockMatrix(Product $product): array
+    {
+        return ProductVariant::with('colourway:id,name,cloth,ink,position')
+            ->where('product_id', $product->id)
+            ->get()
+            ->groupBy('colourway_id')
+            ->map(function ($group) {
+                $colourway = $group->first()->colourway;
+
+                return [
+                    'colourwayId' => $colourway->id,
+                    'name' => $colourway->name,
+                    'cloth' => $colourway->cloth,
+                    'ink' => $colourway->ink,
+                    'position' => $colourway->position,
+                    'total' => (int) $group->sum('stock'),
+                    'sizes' => $group->mapWithKeys(fn (ProductVariant $variant) => [
+                        $variant->size => [
+                            'id' => $variant->id,
+                            'stock' => $variant->stock,
+                            'isActive' => $variant->is_active,
+                        ],
+                    ]),
+                ];
+            })
+            ->sortBy('position')
+            ->values()
+            ->all();
+    }
+
+    public function receiveBatch(
+        Request $request,
+        Product $product,
+        ReceiveStockBatch $receive,
+    ): RedirectResponse {
+        $data = $request->validate([
+            'reference' => ['required', 'string', 'max:60'],
+            'received_on' => ['required', 'date', 'before_or_equal:today'],
+            'supplier_id' => ['nullable', 'exists:suppliers,id'],
+            'unit_cost' => ['nullable', 'numeric', 'min:0', 'max:100000'],
+            'freight' => ['nullable', 'numeric', 'min:0', 'max:1000000'],
+            'duty' => ['nullable', 'numeric', 'min:0', 'max:1000000'],
+            'other_cost' => ['nullable', 'numeric', 'min:0', 'max:1000000'],
+            'note' => ['nullable', 'string', 'max:500'],
+            'quantities' => ['required', 'array'],
+            'quantities.*' => ['nullable', 'integer', 'min:0', 'max:10000'],
+        ]);
+
+        if (collect($data['quantities'])->filter()->isEmpty()) {
+            return back()->withErrors([
+                'quantities' => 'Enter how many arrived in at least one size.',
+            ]);
+        }
+
+        $batch = $receive->handle($product, $data, $request->user());
+
+        return back()->with(
+            'success',
+            "Batch {$batch->reference} received: {$batch->totalReceived()} pieces added."
+        );
     }
 
     /** Stock is edited in bulk, because that is how a stock take happens. */
@@ -140,14 +263,32 @@ class ProductController extends Controller
         ]);
 
         foreach ($data['variants'] as $row) {
-            ProductVariant::where('product_id', $product->id)
+            $variant = ProductVariant::where('product_id', $product->id)
                 ->whereKey($row['id'])
-                ->update([
-                    'stock' => $row['stock'],
-                    'is_active' => $row['is_active'],
+                ->first();
+
+            if (! $variant) {
+                continue;
+            }
+
+            $difference = $row['stock'] - $variant->stock;
+
+            $variant->update([
+                'stock' => $row['stock'],
+                'is_active' => $row['is_active'],
+            ]);
+
+            // A hand edit is a correction, and the ledger should say so.
+            if ($difference !== 0) {
+                StockMovement::create([
+                    'product_variant_id' => $variant->id,
+                    'user_id' => $request->user()?->id,
+                    'quantity' => $difference,
+                    'reason' => StockMovement::REASON_ADJUSTMENT,
                 ]);
+            }
         }
 
-        return back()->with('success', 'Stock updated.');
+        return back()->with('success', 'Stock corrected.');
     }
 }

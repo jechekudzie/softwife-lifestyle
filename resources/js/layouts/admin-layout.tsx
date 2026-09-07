@@ -4,6 +4,7 @@ import {
     Bell,
     ChartNoAxesColumn,
     ChevronDown,
+    Factory,
     LayoutDashboard,
     LogOut,
     Package,
@@ -241,6 +242,12 @@ const NAV = [
         label: 'Orders',
         icon: Receipt,
         match: /^\/admin\/orders/,
+    },
+    {
+        href: '/admin/suppliers',
+        label: 'Suppliers',
+        icon: Factory,
+        match: /^\/admin\/suppliers/,
     },
     {
         href: '/admin/fulfilment',

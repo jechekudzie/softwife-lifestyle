@@ -46,6 +46,12 @@ class Product extends Model
             ->orderBy('colourway_product.position');
     }
 
+    /** @return HasMany<StockBatch, $this> */
+    public function batches(): HasMany
+    {
+        return $this->hasMany(StockBatch::class);
+    }
+
     /** @return HasMany<ProductVariant, $this> */
     public function variants(): HasMany
     {

@@ -1,6 +1,11 @@
-import { Form, Link, router } from '@inertiajs/react';
+import { Form, Link } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
-import { useState } from 'react';
+import {
+    StockPanel,
+    type Batch,
+    type StockRow,
+    type Supplier,
+} from '@/components/admin/stock-panel';
 import AdminLayout from '@/layouts/admin-layout';
 
 type Product = {
@@ -17,15 +22,6 @@ type Product = {
     heroGround: string;
     cardImage: string | null;
     picturedLabel: string | null;
-    isActive: boolean;
-};
-
-type Variant = {
-    id: number;
-    colourway: string;
-    size: string;
-    sku: string;
-    stock: number;
     isActive: boolean;
 };
 
@@ -52,37 +48,20 @@ const input =
 export default function EditProduct({
     product,
     categories,
-    variants,
     grounds,
+    sizes,
+    rows,
+    batches,
+    suppliers,
 }: {
     product: Product;
     categories: { id: number; name: string }[];
-    variants: Variant[];
     grounds: string[];
+    sizes: string[];
+    rows: StockRow[];
+    batches: Batch[];
+    suppliers: Supplier[];
 }) {
-    const [stock, setStock] = useState(variants);
-    const [savingStock, setSavingStock] = useState(false);
-
-    const saveStock = () => {
-        setSavingStock(true);
-        router.put(
-            `/admin/products/${product.slug}/stock`,
-            {
-                variants: stock.map((variant) => ({
-                    id: variant.id,
-                    stock: variant.stock,
-                    is_active: variant.isActive,
-                })),
-            },
-            { onFinish: () => setSavingStock(false), preserveScroll: true },
-        );
-    };
-
-    const setRow = (id: number, patch: Partial<Variant>) =>
-        setStock((rows) =>
-            rows.map((row) => (row.id === id ? { ...row, ...patch } : row)),
-        );
-
     return (
         <AdminLayout
             title={product.name}
@@ -298,95 +277,13 @@ export default function EditProduct({
                 )}
             </Form>
 
-            <section className="border-wine/12 mt-8 rounded-2xl border bg-white/60 p-7">
-                <div className="flex flex-wrap items-end justify-between gap-4">
-                    <div>
-                        <h2 className="font-display text-lg font-bold">
-                            Stock
-                        </h2>
-                        <p className="mt-1 text-sm opacity-55">
-                            One row per colourway and size. Zero means sold out.
-                        </p>
-                    </div>
-                    <button
-                        type="button"
-                        onClick={saveStock}
-                        disabled={savingStock}
-                        className="bg-wine hover:bg-wine-soft rounded-full px-7 py-3 text-sm font-semibold text-white transition disabled:opacity-50"
-                    >
-                        {savingStock ? 'Saving…' : 'Save stock'}
-                    </button>
-                </div>
-
-                <div className="mt-6 overflow-x-auto">
-                    <table className="w-full min-w-[34rem] text-sm">
-                        <thead>
-                            <tr className="border-wine/12 border-b text-left">
-                                <th className="pb-3 text-[0.6rem] font-semibold tracking-[0.2em] uppercase opacity-45">
-                                    Colourway
-                                </th>
-                                <th className="pb-3 text-[0.6rem] font-semibold tracking-[0.2em] uppercase opacity-45">
-                                    Size
-                                </th>
-                                <th className="pb-3 text-[0.6rem] font-semibold tracking-[0.2em] uppercase opacity-45">
-                                    SKU
-                                </th>
-                                <th className="pb-3 text-[0.6rem] font-semibold tracking-[0.2em] uppercase opacity-45">
-                                    Stock
-                                </th>
-                                <th className="pb-3 text-[0.6rem] font-semibold tracking-[0.2em] uppercase opacity-45">
-                                    Sell
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-[rgba(107,33,55,0.08)]">
-                            {stock.map((variant) => (
-                                <tr key={variant.id}>
-                                    <td className="py-2.5">
-                                        {variant.colourway}
-                                    </td>
-                                    <td className="py-2.5">{variant.size}</td>
-                                    <td className="py-2.5 text-xs opacity-45">
-                                        {variant.sku}
-                                    </td>
-                                    <td className="py-2.5">
-                                        <input
-                                            type="number"
-                                            min={0}
-                                            value={variant.stock}
-                                            onChange={(event) =>
-                                                setRow(variant.id, {
-                                                    stock: Number(
-                                                        event.target.value,
-                                                    ),
-                                                })
-                                            }
-                                            className={`border-wine/20 w-20 rounded-lg border bg-white/80 px-3 py-1.5 tabular-nums ${
-                                                variant.stock === 0
-                                                    ? 'text-magenta'
-                                                    : ''
-                                            }`}
-                                        />
-                                    </td>
-                                    <td className="py-2.5">
-                                        <input
-                                            type="checkbox"
-                                            checked={variant.isActive}
-                                            onChange={(event) =>
-                                                setRow(variant.id, {
-                                                    isActive:
-                                                        event.target.checked,
-                                                })
-                                            }
-                                            className="accent-wine h-4 w-4"
-                                        />
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </section>
+            <StockPanel
+                productSlug={product.slug}
+                sizes={sizes}
+                rows={rows}
+                batches={batches}
+                suppliers={suppliers}
+            />
         </AdminLayout>
     );
 }

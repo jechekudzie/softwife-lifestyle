@@ -33,12 +33,12 @@ class CatalogueSeeder extends Seeder
     private function colourways(): array
     {
         $rows = [
-            ['Butter', 'var(--color-butter)', 'var(--color-choc)'],
-            ['Chocolate', 'var(--color-choc)', 'var(--color-butter)'],
-            ['Bone', 'var(--color-bone)', 'var(--color-magenta)'],
-            ['Blush', 'var(--color-blush)', 'var(--color-choc)'],
-            ['Burgundy', 'var(--color-wine)', 'var(--color-butter)'],
-            ['Plum', 'var(--color-plum)', '#ffffff'],
+            ['Butter', '#f2e7b7', '#271814'],
+            ['Chocolate', '#271814', '#f2e7b7'],
+            ['Bone', '#fbf9f4', '#ce3c84'],
+            ['Blush', '#ea7fb0', '#271814'],
+            ['Burgundy', '#6b2137', '#f2e7b7'],
+            ['Plum', '#5a2450', '#ffffff'],
         ];
 
         $made = [];

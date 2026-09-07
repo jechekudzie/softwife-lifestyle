@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\StockMovement;
 use Carbon\CarbonInterface;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -69,8 +70,28 @@ class AnalyticsController extends Controller
             fn ($query) => $query->whereNot('status', 'cancelled')->where('created_at', '>=', $from)
         )->sum('quantity');
 
+        /**
+         * Cost of what was sold, from the snapshot taken at the time of sale.
+         * Pieces sold before any batch carried a cost contribute nothing, so
+         * margin is reported as unknown rather than as pure profit.
+         */
+        $sales = StockMovement::where('reason', StockMovement::REASON_SALE)
+            ->where('created_at', '>=', $from)
+            ->get(['quantity', 'unit_cost_cents']);
+
+        $costed = $sales->whereNotNull('unit_cost_cents');
+        $cost = (int) $costed->sum(fn ($movement) => abs($movement->quantity) * $movement->unit_cost_cents);
+        $costedUnits = (int) $costed->sum(fn ($movement) => abs($movement->quantity));
+        $soldUnits = (int) $sales->sum(fn ($movement) => abs($movement->quantity));
+
         return [
             'revenue' => $revenue / 100,
+            'cost' => $cost / 100,
+            'profit' => ($revenue - $cost) / 100,
+            'margin' => $revenue > 0 ? round(($revenue - $cost) / $revenue * 100) : null,
+            'costCoverage' => $soldUnits > 0
+                ? round($costedUnits / $soldUnits * 100)
+                : null,
             'orders' => $orders,
             'averageOrder' => $orders ? round($revenue / $orders / 100, 2) : 0,
             'units' => $units,

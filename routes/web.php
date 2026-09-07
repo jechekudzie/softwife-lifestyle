@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\Admin\AnalyticsController;
+use App\Http\Controllers\Admin\ColourwayController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
 use App\Http\Controllers\Admin\FulfilmentController;
 use App\Http\Controllers\Admin\OrderController as AdminOrders;
 use App\Http\Controllers\Admin\ProductController as AdminProducts;
+use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Web\CheckoutController;
 use App\Http\Controllers\Web\OrderController;
 use Illuminate\Http\Request;
@@ -46,6 +48,13 @@ Route::middleware(['auth', 'verified', 'admin'])
         Route::get('products/{product}', [AdminProducts::class, 'edit'])->name('products.edit');
         Route::put('products/{product}', [AdminProducts::class, 'update'])->name('products.update');
         Route::put('products/{product}/stock', [AdminProducts::class, 'updateStock'])->name('products.stock');
+        Route::post('products/{product}/batches', [AdminProducts::class, 'receiveBatch'])->name('products.batches');
+
+        Route::put('colourways/{colourway}', [ColourwayController::class, 'update'])->name('colourways.update');
+
+        Route::get('suppliers', [SupplierController::class, 'index'])->name('suppliers.index');
+        Route::post('suppliers', [SupplierController::class, 'store'])->name('suppliers.store');
+        Route::put('suppliers/{supplier}', [SupplierController::class, 'update'])->name('suppliers.update');
 
         Route::get('analytics', AnalyticsController::class)->name('analytics');
 
