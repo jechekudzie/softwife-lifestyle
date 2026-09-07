@@ -191,9 +191,23 @@ export const RIBBON = [
 
 export const REELS: Reel[] = [
     {
-        caption: 'Slow mornings, long lunches',
-        poster: '/media/soft-wife-choc-desk.jpg',
-        src: null,
+        caption: 'The affirmation, up close',
+        poster: '/media/reels/soft-wife-affirmation-print.jpg',
+        src: '/media/reels/soft-wife-affirmation-print.mp4',
+        cloth: CHOC,
+        ink: BUTTER,
+    },
+    {
+        caption: 'Coffee run, soft wife era',
+        poster: '/media/reels/soft-wife-coffee-run.jpg',
+        src: '/media/reels/soft-wife-coffee-run.mp4',
+        cloth: CHOC,
+        ink: BUTTER,
+    },
+    {
+        caption: 'Choosing her scent, unhurried',
+        poster: '/media/reels/soft-mom-fragrance-counter.jpg',
+        src: '/media/reels/soft-mom-fragrance-counter.mp4',
         cloth: CHOC,
         ink: BUTTER,
     },
@@ -202,20 +216,6 @@ export const REELS: Reel[] = [
         poster: '/media/soft-wife-pair-cafe.jpg',
         src: null,
         cloth: CHOC,
-        ink: BUTTER,
-    },
-    {
-        caption: 'Plum, in her soft wife era',
-        poster: '/media/soft-babe-plum-seated.jpg',
-        src: null,
-        cloth: BONE,
-        ink: CHOC,
-    },
-    {
-        caption: 'Boots on, laptop open',
-        poster: '/media/soft-wife-choc-boots.jpg',
-        src: null,
-        cloth: WINE,
         ink: BUTTER,
     },
 ];

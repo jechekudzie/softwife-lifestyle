@@ -9,13 +9,13 @@ import {
     Script,
     SectionHeading,
     SMark,
-    Wordmark,
 } from '@/components/storefront/brand';
 import { StorefrontHeader } from '@/components/storefront/header';
 import {
     ProductCard,
     useRevealOnEnter,
 } from '@/components/storefront/product-card';
+import { ReelTile } from '@/components/storefront/reel-tile';
 import {
     AFFIRMATIONS,
     CATEGORIES,
@@ -551,41 +551,7 @@ function Lifestyle() {
                             className="sw-reveal"
                             style={{ transitionDelay: `${index * 80}ms` }}
                         >
-                            <figure className="group">
-                                <div
-                                    className="relative aspect-[9/16] w-full overflow-hidden rounded-[1.5rem]"
-                                    style={{ backgroundColor: reel.cloth }}
-                                >
-                                    {reel.src ? (
-                                        <video
-                                            className="h-full w-full object-cover"
-                                            src={reel.src}
-                                            poster={reel.poster ?? undefined}
-                                            muted
-                                            loop
-                                            playsInline
-                                            controls
-                                        />
-                                    ) : reel.poster ? (
-                                        <img
-                                            src={reel.poster}
-                                            alt={reel.caption}
-                                            className="h-full w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.06]"
-                                            loading="lazy"
-                                        />
-                                    ) : (
-                                        <div className="absolute inset-0 flex items-center justify-center p-6">
-                                            <Wordmark
-                                                color={reel.ink}
-                                                className="w-3/4 opacity-25"
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-                                <figcaption className="mt-4 text-sm leading-snug opacity-60">
-                                    {reel.caption}
-                                </figcaption>
-                            </figure>
+                            <ReelTile reel={reel} />
                         </li>
                     ))}
                 </ul>
