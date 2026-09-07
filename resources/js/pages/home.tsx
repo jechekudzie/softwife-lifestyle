@@ -23,6 +23,7 @@ import {
 import {
     AFFIRMATIONS,
     CATEGORIES,
+    HERO_LINES,
     LINES,
     MANIFESTO,
     MANIFESTO_REEL,
@@ -167,15 +168,15 @@ function Hero({ variant }: { variant?: HeroVariant }) {
         }
 
         const timer = window.setInterval(
-            () => setActive((current) => (current + 1) % LINES.length),
+            () => setActive((current) => (current + 1) % HERO_LINES.length),
             6000,
         );
 
         return () => window.clearInterval(timer);
     }, [reduced, paused, variant]);
 
-    const line = LINES[active];
-    const next = LINES[(active + 1) % LINES.length];
+    const line = HERO_LINES[active];
+    const next = LINES[(active + 1) % HERO_LINES.length];
     // A preview route locks one ground; otherwise it follows the garment.
     const key: HeroVariant = variant ?? line.ground;
     const ground = HERO_GROUNDS[key];
@@ -303,7 +304,7 @@ function Hero({ variant }: { variant?: HeroVariant }) {
                         onMouseEnter={() => setPaused(true)}
                         onMouseLeave={() => setPaused(false)}
                     >
-                        {LINES.map((item, index) => (
+                        {HERO_LINES.map((item, index) => (
                             <li key={item.slug}>
                                 <button
                                     type="button"
@@ -359,7 +360,7 @@ function Hero({ variant }: { variant?: HeroVariant }) {
                 {/* Plate. A framed card on the ground, so no seam exists. */}
                 <div className="relative order-1 flex items-center px-6 pt-24 pb-4 sm:px-12 lg:order-2 lg:py-14 lg:pr-14 lg:pl-4">
                     <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.75rem] shadow-[0_40px_80px_-40px_rgba(39,24,20,0.55)] lg:aspect-auto lg:h-full lg:rounded-[2.25rem]">
-                        {LINES.map((item, index) => (
+                        {HERO_LINES.map((item, index) => (
                             <img
                                 key={`${item.slug}-${index === active}`}
                                 src={item.hero}
@@ -541,6 +542,8 @@ function Lifestyle({
     onOpenReel: (index: number) => void;
     reelsPaused: boolean;
 }) {
+    // Only one reel may carry sound, or the wall talks over itself.
+    const [audible, setAudible] = useState<number | null>(null);
     return (
         <section id="lifestyle" className="bg-petal px-6 py-24 sm:py-32">
             <div className="mx-auto max-w-6xl">
@@ -567,6 +570,12 @@ function Lifestyle({
                                 reel={reel}
                                 onOpen={() => onOpenReel(index)}
                                 paused={reelsPaused}
+                                soundOn={audible === index && !reelsPaused}
+                                onToggleSound={() =>
+                                    setAudible((current) =>
+                                        current === index ? null : index,
+                                    )
+                                }
                             />
                         </li>
                     ))}

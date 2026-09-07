@@ -1,4 +1,11 @@
-import { ChevronLeft, ChevronRight, Expand, X } from 'lucide-react';
+import {
+    ChevronLeft,
+    ChevronRight,
+    Expand,
+    Volume2,
+    VolumeX,
+    X,
+} from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Wordmark } from '@/components/storefront/brand';
 import type { Reel } from '@/lib/storefront';
@@ -26,10 +33,15 @@ export function ReelTile({
     reel,
     onOpen,
     paused,
+    soundOn = false,
+    onToggleSound,
 }: {
     reel: Reel;
     onOpen: () => void;
     paused: boolean;
+    /** Only one tile in a wall may carry sound at a time. */
+    soundOn?: boolean;
+    onToggleSound?: () => void;
 }) {
     const video = useRef<HTMLVideoElement>(null);
     const frame = useRef<HTMLDivElement>(null);
@@ -69,7 +81,7 @@ export function ReelTile({
     }, [onScreen, paused, reduced]);
 
     return (
-        <figure className="group">
+        <figure className="group relative">
             <button
                 type="button"
                 onClick={onOpen}
@@ -86,7 +98,7 @@ export function ReelTile({
                             className="h-full w-full object-cover"
                             src={reel.src}
                             poster={reel.poster ?? undefined}
-                            muted
+                            muted={!soundOn}
                             loop
                             playsInline
                             preload="metadata"
@@ -122,6 +134,28 @@ export function ReelTile({
                     <span className="sr-only">Open {reel.caption}</span>
                 </div>
             </button>
+
+            {reel.src && onToggleSound ? (
+                <button
+                    type="button"
+                    onClick={onToggleSound}
+                    aria-pressed={soundOn}
+                    className={`absolute right-4 bottom-[4.75rem] flex h-10 w-10 items-center justify-center rounded-full text-white backdrop-blur-sm transition focus-visible:ring-4 focus-visible:ring-white/70 focus-visible:outline-none ${
+                        soundOn
+                            ? 'bg-white/40'
+                            : 'bg-[rgba(39,24,20,0.45)] hover:bg-[rgba(39,24,20,0.65)]'
+                    }`}
+                >
+                    {soundOn ? (
+                        <Volume2 className="h-4 w-4" />
+                    ) : (
+                        <VolumeX className="h-4 w-4" />
+                    )}
+                    <span className="sr-only">
+                        {soundOn ? 'Mute' : 'Play sound for'} {reel.caption}
+                    </span>
+                </button>
+            ) : null}
             <figcaption className="mt-4 text-sm leading-snug opacity-60">
                 {reel.caption}
             </figcaption>

@@ -154,6 +154,21 @@ export const LINES: AffirmationLine[] = [
     },
 ];
 
+/**
+ * The order the hero travels, opening on the burgundy plate. The catalogue
+ * keeps its own order, where Soft Wife leads.
+ */
+export const HERO_ORDER = [
+    'soft-mom',
+    'soft-wife',
+    'soft-babe',
+    'becoming-softwife',
+];
+
+export const HERO_LINES: AffirmationLine[] = HERO_ORDER.map(
+    (slug) => LINES.find((line) => line.slug === slug) as AffirmationLine,
+);
+
 export const CATEGORIES: Category[] = [
     {
         name: 'Tees',
