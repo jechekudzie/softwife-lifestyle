@@ -1,8 +1,9 @@
 import { Head } from '@inertiajs/react';
 import { Check, PenLine, Store, Truck } from 'lucide-react';
 import { useEffect } from 'react';
-import { Lockup, Script } from '@/components/storefront/brand';
+import { Script } from '@/components/storefront/brand';
 import { StorefrontHeader } from '@/components/storefront/header';
+import { StorefrontFooter } from '@/components/storefront/footer';
 import { useCart } from '@/lib/cart';
 
 type OrderItem = {
@@ -223,16 +224,7 @@ export default function OrderConfirmation({
                     </div>
                 </section>
 
-                <footer className="bg-wine text-butter mt-8 px-6 py-16 text-center">
-                    <Lockup
-                        color="var(--color-butter)"
-                        className="mx-auto w-44"
-                        align="center"
-                    />
-                    <p className="mt-6 text-xs tracking-[0.28em] uppercase opacity-45">
-                        Est. 2025
-                    </p>
-                </footer>
+                <StorefrontFooter />
             </div>
         </>
     );

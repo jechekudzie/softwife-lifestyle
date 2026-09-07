@@ -1,7 +1,8 @@
 import { Head } from '@inertiajs/react';
 import { Minus, PenLine, Plus, ShoppingBag, Trash2 } from 'lucide-react';
-import { Garment, Lockup, Print, Script } from '@/components/storefront/brand';
+import { Garment, Print, Script } from '@/components/storefront/brand';
 import { StorefrontHeader } from '@/components/storefront/header';
+import { StorefrontFooter } from '@/components/storefront/footer';
 import {
     CUSTOM_AFFIRMATION_FEE,
     CUSTOM_LEAD_TIME,
@@ -281,16 +282,7 @@ export default function Cart() {
                     )}
                 </section>
 
-                <footer className="bg-wine text-butter mt-8 px-6 py-16 text-center">
-                    <Lockup
-                        color="var(--color-butter)"
-                        className="mx-auto w-44"
-                        align="center"
-                    />
-                    <p className="mt-6 text-xs tracking-[0.28em] uppercase opacity-45">
-                        Est. 2025
-                    </p>
-                </footer>
+                <StorefrontFooter />
             </div>
         </>
     );

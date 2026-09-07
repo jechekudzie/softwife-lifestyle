@@ -11,6 +11,7 @@ import {
     SMark,
 } from '@/components/storefront/brand';
 import { StorefrontHeader } from '@/components/storefront/header';
+import { StorefrontFooter } from '@/components/storefront/footer';
 import {
     ProductCard,
     useRevealOnEnter,
@@ -741,33 +742,6 @@ function Services() {
     );
 }
 
-const SOCIALS = [
-    { label: 'Instagram', href: 'https://www.instagram.com/_softwife.co' },
-    { label: 'TikTok', href: 'https://www.tiktok.com/tag/softwife' },
-    { label: 'WhatsApp', href: '#story' },
-];
-
-const FOOTER_LINKS = [
-    {
-        heading: 'Shop',
-        links: ['Tees', 'Tracksuits', 'Caps', 'Gift cards', 'Size guide'],
-    },
-    {
-        heading: 'The brand',
-        links: ['Our story', 'Affirmations', 'Journal', 'Stockists'],
-    },
-    {
-        heading: 'Help',
-        links: [
-            'Track your order',
-            'Delivery',
-            'Returns',
-            'Contact us',
-            'FAQs',
-        ],
-    },
-];
-
 export default function Home({ variant }: { variant?: HeroVariant }) {
     const [landed, setLanded] = useState(false);
     const [lightbox, setLightbox] = useState<{
@@ -882,67 +856,7 @@ export default function Home({ variant }: { variant?: HeroVariant }) {
                     </form>
                 </section>
 
-                <footer className="bg-wine text-butter px-6 pt-20">
-                    <div className="mx-auto max-w-6xl">
-                        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-5">
-                            <div className="lg:col-span-2">
-                                <Lockup
-                                    color="var(--color-butter)"
-                                    className="w-52"
-                                />
-                                <p className="mt-6 max-w-[26em] text-sm leading-relaxed opacity-60">
-                                    An affirmation and manifestation lifestyle
-                                    brand for women. Comfortable luxury, made to
-                                    be worn and believed.
-                                </p>
-                                <p className="font-display mt-8 max-w-[12em] text-2xl leading-[1.2] italic">
-                                    Softness over survival, in every season.
-                                </p>
-                            </div>
-
-                            {FOOTER_LINKS.map((column) => (
-                                <div key={column.heading}>
-                                    <h2 className="text-[0.62rem] font-semibold tracking-[0.28em] uppercase opacity-50">
-                                        {column.heading}
-                                    </h2>
-                                    <ul className="mt-5 space-y-3 text-sm">
-                                        {column.links.map((label) => (
-                                            <li key={label}>
-                                                <a
-                                                    href="#shop"
-                                                    className="opacity-75 transition hover:opacity-100"
-                                                >
-                                                    {label}
-                                                </a>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            ))}
-                        </div>
-
-                        <div className="mt-16 flex flex-wrap items-center justify-between gap-6 border-t border-current/15 py-8">
-                            <p className="text-xs opacity-50">
-                                © 2025 Softwife Lifestyle. Est. 2025.
-                            </p>
-                            <ul className="flex flex-wrap items-center gap-6 text-xs">
-                                {SOCIALS.map((social) => (
-                                    <li key={social.label}>
-                                        <a
-                                            href={social.href}
-                                            className="opacity-60 transition hover:opacity-100"
-                                        >
-                                            {social.label}
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
-                            <p className="text-xs opacity-50">
-                                Prices in USD · Shipping regionally
-                            </p>
-                        </div>
-                    </div>
-                </footer>
+                <StorefrontFooter />
             </div>
 
             {lightbox ? (

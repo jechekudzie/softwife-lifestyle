@@ -1,7 +1,7 @@
 import { Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import { Garment, Print } from '@/components/storefront/brand';
-import { CUSTOM_LEAD_TIME, unitPrice, useCart } from '@/lib/cart';
+import { unitPrice, useCart } from '@/lib/cart';
 import { formatPrice } from '@/lib/storefront';
 
 /** The bag, as a panel hanging off the header button. */
