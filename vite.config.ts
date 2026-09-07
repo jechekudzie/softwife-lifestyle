@@ -33,6 +33,12 @@ export default defineConfig({
         tailwindcss(),
         wayfinder({
             formVariants: true,
+            /**
+             * Wayfinder shells out to `php`, which on a host running several
+             * PHP versions is not necessarily the one this project needs.
+             * Forge exposes the right binary, so prefer it when it is set.
+             */
+            command: `"${process.env.PHP_BINARY ?? process.env.FORGE_PHP ?? 'php'}" artisan wayfinder:generate`,
         }),
     ]),
     server: {
