@@ -343,7 +343,7 @@ export default function AdminLayout({
                         <UserMenu auth={auth} />
                     </div>
 
-                    <div className="mx-auto max-w-5xl px-6 py-10 sm:px-10">
+                    <div className="mx-auto w-full max-w-[110rem] px-6 py-10 sm:px-10">
                         <div className="mb-9 flex flex-wrap items-end justify-between gap-5">
                             <div>
                                 <h1 className="font-display text-3xl font-bold">

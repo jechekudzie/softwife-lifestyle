@@ -33,8 +33,9 @@ const money = (value: number) =>
 export function RevenueChart({ data }: { data: DailyPoint[] }) {
     const [hover, setHover] = useState<number | null>(null);
 
-    const width = 720;
-    const height = 240;
+    // A wide viewBox keeps the plot from towering on a full-width page.
+    const width = 1240;
+    const height = 250;
     const pad = { top: 16, right: 16, bottom: 28, left: 48 };
     const plotW = width - pad.left - pad.right;
     const plotH = height - pad.top - pad.bottom;
@@ -62,7 +63,7 @@ export function RevenueChart({ data }: { data: DailyPoint[] }) {
         <figure className="relative">
             <svg
                 viewBox={`0 0 ${width} ${height}`}
-                className="w-full"
+                className="max-h-[20rem] w-full"
                 role="img"
                 aria-label="Revenue per day"
                 onMouseLeave={() => setHover(null)}
