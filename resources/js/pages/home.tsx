@@ -56,6 +56,8 @@ export type HeroVariant = 'rose' | 'wine' | 'brown' | 'plum' | 'pale' | 'photo';
 
 type Ground = {
     layer: string;
+    /** The lockup's own colour, where it differs from the rest of the ink. */
+    wordmark?: string;
     /** Optional photographic plate behind the ground. */
     image?: string;
     mark: string;
@@ -90,6 +92,7 @@ const HERO_GROUNDS: Record<HeroVariant, Ground> = {
     },
     rose: {
         layer: 'radial-gradient(120% 105% at 4% 2%, #fffaf3 0%, #fdf0f5 34%, #f8dde9 72%, #f2cfdf 100%)',
+        wordmark: 'var(--color-magenta)',
         mark: 'var(--color-wine)',
         body: 'rgba(39, 24, 20, 0.65)',
         rule: 'var(--color-wine)',
@@ -271,7 +274,7 @@ function Hero({ variant }: { variant?: HeroVariant }) {
                         </h1>
 
                         <Lockup
-                            color={ground.mark}
+                            color={ground.wordmark ?? ground.mark}
                             className="sw-rise w-full max-w-[34rem]"
                             style={{ transition: INK_TRANSITION }}
                         />
