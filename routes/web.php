@@ -13,21 +13,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::inertia('/', 'home')->name('home');
+/** The homepage sits on one rose ground; the plates still travel. */
+Route::inertia('/', 'home', ['variant' => 'rose'])->name('home');
+
+/** The same page, letting each line bring its own ground. */
+Route::inertia('dark', 'home')->name('home.dark');
 Route::inertia('shop', 'shop/index')->name('shop');
 Route::inertia('cart', 'cart')->name('cart');
 Route::get('checkout', [CheckoutController::class, 'index'])->name('checkout');
 Route::post('checkout', [CheckoutController::class, 'store'])->name('checkout.store');
 Route::get('orders/{order}', [OrderController::class, 'show'])->name('orders.show');
-
-/*
- * Hero treatment previews, so the visual direction can be compared live.
- * Remove once a direction is chosen.
- */
-foreach (['rose', 'wine', 'brown', 'plum', 'pale', 'photo'] as $variant) {
-    Route::inertia("preview/{$variant}", 'home', ['variant' => $variant])
-        ->name("preview.{$variant}");
-}
 
 Route::middleware(['auth', 'verified'])->group(function () {
     /** Admins run the shop, so send them where the work is. */

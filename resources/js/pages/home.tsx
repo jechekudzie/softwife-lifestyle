@@ -165,7 +165,7 @@ function Hero({ variant }: { variant?: HeroVariant }) {
     const reduced = usePrefersReducedMotion();
 
     useEffect(() => {
-        if (reduced || paused || variant) {
+        if (reduced || paused) {
             return;
         }
 
@@ -175,7 +175,7 @@ function Hero({ variant }: { variant?: HeroVariant }) {
         );
 
         return () => window.clearInterval(timer);
-    }, [reduced, paused, variant]);
+    }, [reduced, paused]);
 
     const line = HERO_LINES[active];
     const next = LINES[(active + 1) % HERO_LINES.length];
@@ -183,9 +183,14 @@ function Hero({ variant }: { variant?: HeroVariant }) {
     const key: HeroVariant = variant ?? line.ground;
     const ground = HERO_GROUNDS[key];
 
-    const usedGrounds = Array.from(
-        new Set<HeroVariant>([...HERO_LINES.map((item) => item.ground), key]),
-    );
+    const usedGrounds = variant
+        ? [variant]
+        : Array.from(
+              new Set<HeroVariant>([
+                  ...HERO_LINES.map((item) => item.ground),
+                  key,
+              ]),
+          );
 
     /**
      * Plates are mounted as they are reached, plus the one coming next so the
@@ -461,26 +466,16 @@ function Ribbon() {
 
 function BestSellers() {
     return (
-        <section id="shop" className="bg-bone relative overflow-hidden">
-            {/* A wine band behind the upper half, so the cards sit on contrast. */}
-            <div
-                aria-hidden="true"
-                className="bg-wine absolute inset-x-0 top-0 h-[26rem]"
-            />
-            <div
-                aria-hidden="true"
-                className="sw-grain bg-wine absolute inset-x-0 top-0 h-[26rem]"
-            />
-
-            <div className="relative mx-auto max-w-6xl px-6 pt-24 pb-24 sm:pt-28 sm:pb-32">
-                <div className="sw-reveal text-butter text-center">
+        <section id="shop" className="bg-bone">
+            <div className="mx-auto max-w-6xl px-6 pt-24 pb-24 sm:pt-28 sm:pb-32">
+                <div className="sw-reveal text-center">
                     <p className="font-display text-[clamp(1.9rem,4.6vw,3.1rem)] leading-[1.12]">
                         Four lines. One{' '}
-                        <Script className="text-[1.4em] text-[var(--color-rose)]">
+                        <Script className="text-magenta text-[1.4em]">
                             wardrobe
                         </Script>
                     </p>
-                    <p className="mx-auto mt-5 max-w-[34em] text-sm leading-relaxed opacity-70">
+                    <p className="mx-auto mt-5 max-w-[34em] text-sm leading-relaxed opacity-60">
                         Heavyweight cotton, printed in small runs. Choose the
                         words for the season you are in.
                     </p>
