@@ -50,7 +50,7 @@ class OrderController extends Controller
                 'paymentStatus' => $order->payment_status,
                 'fulfilmentMethod' => $order->fulfilment_method,
                 'total' => $order->total_cents / 100,
-                'placedAt' => $order->created_at?->toDayDateTimeString(),
+                'placedAt' => $order->created_at?->format('j M'),
             ]),
             'filters' => ['status' => $status, 'search' => $search],
             'statuses' => self::STATUSES,

@@ -1,6 +1,7 @@
 import { Link, router } from '@inertiajs/react';
 import { Search } from 'lucide-react';
 import { useState } from 'react';
+import { MethodTag, PaymentTag, StageTag } from '@/components/admin/status';
 import AdminLayout from '@/layouts/admin-layout';
 
 type Row = {
@@ -70,7 +71,7 @@ export default function AdminOrders({
                         onClick={() => apply({ status: '' })}
                         className={`rounded-full border px-4 py-2 text-xs font-medium transition ${
                             filters.status === ''
-                                ? 'border-wine bg-wine text-white'
+                                ? 'border-magenta bg-magenta text-white'
                                 : 'border-wine/20 hover:border-wine/50'
                         }`}
                     >
@@ -83,7 +84,7 @@ export default function AdminOrders({
                             onClick={() => apply({ status })}
                             className={`rounded-full border px-4 py-2 text-xs font-medium capitalize transition ${
                                 filters.status === status
-                                    ? 'border-wine bg-wine text-white'
+                                    ? 'border-magenta bg-magenta text-white'
                                     : 'border-wine/20 hover:border-wine/50'
                             }`}
                         >
@@ -107,26 +108,19 @@ export default function AdminOrders({
                                     </span>
                                     <span className="block text-xs opacity-50">
                                         {order.reference} · {order.email}
+                                        {order.placedAt
+                                            ? ` · ${order.placedAt}`
+                                            : ''}
                                     </span>
                                 </span>
 
-                                <span className="flex items-center gap-3">
-                                    <span className="border-wine/20 rounded-full border px-2.5 py-1 text-[0.6rem] tracking-[0.14em] uppercase opacity-65">
-                                        {order.fulfilmentMethod}
-                                    </span>
-                                    <span className="border-wine/20 rounded-full border px-2.5 py-1 text-[0.6rem] tracking-[0.14em] uppercase opacity-65">
-                                        {order.status}
-                                    </span>
-                                    <span
-                                        className={`rounded-full px-2.5 py-1 text-[0.6rem] tracking-[0.14em] uppercase ${
-                                            order.paymentStatus === 'paid'
-                                                ? 'bg-petal text-wine'
-                                                : 'text-magenta border-magenta/30 border'
-                                        }`}
-                                    >
-                                        {order.paymentStatus}
-                                    </span>
-                                    <span className="w-20 text-right text-sm font-medium tabular-nums">
+                                <span className="flex flex-wrap items-center gap-x-5 gap-y-2">
+                                    <MethodTag
+                                        method={order.fulfilmentMethod}
+                                    />
+                                    <PaymentTag status={order.paymentStatus} />
+                                    <StageTag status={order.status} />
+                                    <span className="font-display text-base font-bold tabular-nums sm:w-24 sm:text-right">
                                         ${order.total.toFixed(2)}
                                     </span>
                                 </span>
@@ -150,7 +144,7 @@ export default function AdminOrders({
                             onClick={() => link.url && router.get(link.url)}
                             className={`rounded-full border px-3.5 py-2 text-xs transition disabled:opacity-30 ${
                                 link.active
-                                    ? 'border-wine bg-wine text-white'
+                                    ? 'border-magenta bg-magenta text-white'
                                     : 'border-wine/20 hover:border-wine/50'
                             }`}
                             dangerouslySetInnerHTML={{ __html: link.label }}

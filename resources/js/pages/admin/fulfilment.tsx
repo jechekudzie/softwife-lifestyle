@@ -29,6 +29,22 @@ type Shop = {
 const cell =
     'border-wine/20 w-full rounded-lg border bg-white/80 px-3 py-2 text-sm focus-visible:ring-4 focus-visible:ring-[var(--color-rose)] focus-visible:outline-none';
 
+/**
+ * Column headings for the editable grids. The inputs alone gave no clue that a
+ * bare "5" was a delivery fee in dollars.
+ */
+function Columns({ template, labels }: { template: string; labels: string[] }) {
+    return (
+        <div
+            className={`text-wine/45 mb-3 hidden gap-3 text-[0.58rem] font-semibold tracking-[0.2em] uppercase sm:grid ${template}`}
+        >
+            {labels.map((label) => (
+                <span key={label}>{label}</span>
+            ))}
+        </div>
+    );
+}
+
 export default function Fulfilment({
     zones: initialZones,
     points: initialPoints,
@@ -86,7 +102,7 @@ export default function Fulfilment({
                     type="button"
                     onClick={save}
                     disabled={saving}
-                    className="bg-wine hover:bg-wine-soft rounded-full px-7 py-3 text-sm font-semibold text-white transition disabled:opacity-50"
+                    className="bg-magenta hover:bg-magenta-deep rounded-full px-7 py-3 text-sm font-semibold text-white transition disabled:opacity-50"
                 >
                     {saving ? 'Saving…' : 'Save changes'}
                 </button>
@@ -97,7 +113,20 @@ export default function Fulfilment({
                     Delivery zones
                 </h2>
 
-                <ul className="mt-6 space-y-5">
+                <div className="mt-6">
+                    <Columns
+                        template="sm:grid-cols-[1.2fr_1.6fr_0.6fr_0.8fr_auto]"
+                        labels={[
+                            'Zone',
+                            'Covers',
+                            `Fee (${shop.currency})`,
+                            'Arrives in',
+                            'Offer',
+                        ]}
+                    />
+                </div>
+
+                <ul className="space-y-5">
                     {zones.map((zone) => (
                         <li
                             key={zone.id}
@@ -157,9 +186,9 @@ export default function Fulfilment({
                                             isActive: event.target.checked,
                                         })
                                     }
-                                    className="accent-wine h-4 w-4"
+                                    className="accent-magenta h-4 w-4"
                                 />
-                                Offer
+                                <span className="sm:sr-only">Offer</span>
                             </label>
                         </li>
                     ))}
@@ -171,7 +200,14 @@ export default function Fulfilment({
                     Collection points
                 </h2>
 
-                <ul className="mt-6 space-y-5">
+                <div className="mt-6">
+                    <Columns
+                        template="sm:grid-cols-[1fr_1.6fr_1fr_auto]"
+                        labels={['Point', 'Address', 'Open', 'Offer']}
+                    />
+                </div>
+
+                <ul className="space-y-5">
                     {points.map((point) => (
                         <li
                             key={point.id}
@@ -216,9 +252,9 @@ export default function Fulfilment({
                                             isActive: event.target.checked,
                                         })
                                     }
-                                    className="accent-wine h-4 w-4"
+                                    className="accent-magenta h-4 w-4"
                                 />
-                                Offer
+                                <span className="sm:sr-only">Offer</span>
                             </label>
                         </li>
                     ))}

@@ -69,7 +69,7 @@ export default function EditProduct({
             actions={
                 <Link
                     href="/admin/products"
-                    className="border-wine/25 hover:bg-wine flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-semibold transition hover:text-white"
+                    className="border-wine/25 hover:bg-magenta flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-semibold transition hover:text-white"
                 >
                     <ArrowLeft className="h-4 w-4" />
                     All products
@@ -261,7 +261,7 @@ export default function EditProduct({
                                 name="is_active"
                                 value="1"
                                 defaultChecked={product.isActive}
-                                className="accent-wine h-4 w-4"
+                                className="accent-magenta h-4 w-4"
                             />
                             Show this product in the shop
                         </label>
@@ -269,7 +269,7 @@ export default function EditProduct({
                         <button
                             type="submit"
                             disabled={processing}
-                            className="bg-wine hover:bg-wine-soft mt-8 rounded-full px-8 py-3.5 text-sm font-semibold text-white transition disabled:opacity-50"
+                            className="bg-magenta hover:bg-magenta-deep mt-8 rounded-full px-8 py-3.5 text-sm font-semibold text-white transition disabled:opacity-50"
                         >
                             {processing ? 'Saving…' : 'Save product'}
                         </button>

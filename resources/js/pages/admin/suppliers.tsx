@@ -154,7 +154,7 @@ function Row({ supplier }: { supplier: Supplier }) {
                                     isActive: event.target.checked,
                                 })
                             }
-                            className="accent-wine h-4 w-4"
+                            className="accent-magenta h-4 w-4"
                         />
                         Still using them
                     </label>
@@ -172,7 +172,7 @@ function Row({ supplier }: { supplier: Supplier }) {
                     type="button"
                     onClick={save}
                     disabled={busy}
-                    className="bg-wine hover:bg-wine-soft rounded-full px-7 py-2.5 text-sm font-semibold text-white transition disabled:opacity-50"
+                    className="bg-magenta hover:bg-magenta-deep rounded-full px-7 py-2.5 text-sm font-semibold text-white transition disabled:opacity-50"
                 >
                     {busy ? 'Saving…' : 'Save'}
                 </button>
@@ -210,7 +210,7 @@ export default function Suppliers({ suppliers }: { suppliers: Supplier[] }) {
                 <button
                     type="button"
                     onClick={() => setAdding((value) => !value)}
-                    className="bg-wine hover:bg-wine-soft flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white transition"
+                    className="bg-magenta hover:bg-magenta-deep flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-white transition"
                 >
                     <Plus className="h-4 w-4" />
                     Add a supplier
@@ -234,7 +234,7 @@ export default function Suppliers({ suppliers }: { suppliers: Supplier[] }) {
                         type="button"
                         onClick={create}
                         disabled={busy || name.trim().length < 2}
-                        className="bg-wine hover:bg-wine-soft rounded-full px-7 py-3 text-sm font-semibold text-white transition disabled:opacity-40"
+                        className="bg-magenta hover:bg-magenta-deep rounded-full px-7 py-3 text-sm font-semibold text-white transition disabled:opacity-40"
                     >
                         {busy ? 'Adding…' : 'Add'}
                     </button>

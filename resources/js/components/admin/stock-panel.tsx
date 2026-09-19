@@ -175,7 +175,7 @@ export function StockPanel({
                         onClick={() => setMode('receive')}
                         className={`flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold transition ${
                             mode === 'receive'
-                                ? 'bg-wine text-white'
+                                ? 'bg-magenta text-white'
                                 : 'hover:opacity-60'
                         }`}
                     >
@@ -187,7 +187,7 @@ export function StockPanel({
                         onClick={() => setMode('correct')}
                         className={`flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold transition ${
                             mode === 'correct'
-                                ? 'bg-wine text-white'
+                                ? 'bg-magenta text-white'
                                 : 'hover:opacity-60'
                         }`}
                     >
@@ -264,29 +264,46 @@ export function StockPanel({
                                                 className="border-wine/08 border-b px-1.5 py-2.5"
                                             >
                                                 {mode === 'receive' ? (
-                                                    <input
-                                                        type="number"
-                                                        min={0}
-                                                        placeholder="0"
-                                                        aria-label={`${row.name} ${size} received`}
-                                                        value={
-                                                            intake[
-                                                                variant.id
-                                                            ] ?? ''
-                                                        }
-                                                        onChange={(event) =>
-                                                            setIntake(
-                                                                (current) => ({
-                                                                    ...current,
-                                                                    [variant.id]:
-                                                                        event
-                                                                            .target
-                                                                            .value,
-                                                                }),
-                                                            )
-                                                        }
-                                                        className={cell}
-                                                    />
+                                                    <>
+                                                        <input
+                                                            type="number"
+                                                            min={0}
+                                                            placeholder="0"
+                                                            aria-label={`${row.name} ${size} received`}
+                                                            value={
+                                                                intake[
+                                                                    variant.id
+                                                                ] ?? ''
+                                                            }
+                                                            onChange={(event) =>
+                                                                setIntake(
+                                                                    (
+                                                                        current,
+                                                                    ) => ({
+                                                                        ...current,
+                                                                        [variant.id]:
+                                                                            event
+                                                                                .target
+                                                                                .value,
+                                                                    }),
+                                                                )
+                                                            }
+                                                            className={cell}
+                                                        />
+                                                        {/* What is already there, so you know what to order. */}
+                                                        <span
+                                                            className={`mt-1 block text-center text-[0.62rem] tabular-nums ${
+                                                                variant.stock ===
+                                                                0
+                                                                    ? 'text-magenta'
+                                                                    : 'text-wine/40'
+                                                            }`}
+                                                        >
+                                                            {variant.stock === 0
+                                                                ? 'out'
+                                                                : `${variant.stock} on hand`}
+                                                        </span>
+                                                    </>
                                                 ) : (
                                                     <input
                                                         type="number"
@@ -485,7 +502,7 @@ export function StockPanel({
                             type="button"
                             onClick={receive}
                             disabled={busy || !intakeUnits || !reference.trim()}
-                            className="bg-wine hover:bg-wine-soft rounded-full px-8 py-3.5 text-sm font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-40"
+                            className="bg-magenta hover:bg-magenta-deep rounded-full px-8 py-3.5 text-sm font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-40"
                         >
                             {busy ? 'Receiving…' : 'Receive batch'}
                         </button>
@@ -497,7 +514,7 @@ export function StockPanel({
                         type="button"
                         onClick={saveCorrections}
                         disabled={busy}
-                        className="bg-wine hover:bg-wine-soft rounded-full px-8 py-3.5 text-sm font-semibold text-white transition disabled:opacity-50"
+                        className="bg-magenta hover:bg-magenta-deep rounded-full px-8 py-3.5 text-sm font-semibold text-white transition disabled:opacity-50"
                     >
                         {busy ? 'Saving…' : 'Save corrections'}
                     </button>

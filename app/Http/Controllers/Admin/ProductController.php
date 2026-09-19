@@ -22,8 +22,9 @@ class ProductController extends Controller
     public function index(): Response
     {
         return Inertia::render('admin/products/index', [
-            'products' => Product::with('category:id,name')
+            'products' => Product::with('category:id,name', 'colourways:id,name,cloth')
                 ->withSum('variants as stock_total', 'stock')
+                ->withCount(['variants as sold_out_variants' => fn ($query) => $query->where('stock', '<=', 0)])
                 ->orderBy('position')
                 ->get()
                 ->map(fn (Product $product) => [
@@ -38,6 +39,11 @@ class ProductController extends Controller
                     'isActive' => $product->is_active,
                     'image' => $product->card_image,
                     'stock' => (int) ($product->stock_total ?? 0),
+                    'soldOut' => (int) $product->sold_out_variants,
+                    'colourways' => $product->colourways->map(fn (Colourway $colourway) => [
+                        'name' => $colourway->name,
+                        'cloth' => $colourway->cloth,
+                    ])->values(),
                 ]),
         ]);
     }

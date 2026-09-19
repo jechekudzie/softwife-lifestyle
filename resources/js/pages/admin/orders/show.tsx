@@ -1,5 +1,6 @@
 import { Form, Link } from '@inertiajs/react';
 import { ArrowLeft, PenLine, Store, Truck } from 'lucide-react';
+import { PaymentTag, StageTag } from '@/components/admin/status';
 import AdminLayout from '@/layouts/admin-layout';
 
 type Item = {
@@ -56,7 +57,7 @@ export default function ShowOrder({
             actions={
                 <Link
                     href="/admin/orders"
-                    className="border-wine/25 hover:bg-wine flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-semibold transition hover:text-white"
+                    className="border-wine/25 hover:bg-magenta flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-semibold transition hover:text-white"
                 >
                     <ArrowLeft className="h-4 w-4" />
                     All orders
@@ -196,10 +197,15 @@ export default function ShowOrder({
                         {({ processing }) => (
                             <>
                                 <h2 className="text-[0.6rem] font-semibold tracking-[0.24em] uppercase opacity-45">
-                                    Update
+                                    Where it stands
                                 </h2>
 
-                                <div className="mt-5">
+                                <div className="mt-4 flex items-center gap-4">
+                                    <StageTag status={order.status} />
+                                    <PaymentTag status={order.paymentStatus} />
+                                </div>
+
+                                <div className="mt-6">
                                     <label
                                         htmlFor="status"
                                         className="text-xs opacity-55"
@@ -269,7 +275,7 @@ export default function ShowOrder({
                                 <button
                                     type="submit"
                                     disabled={processing}
-                                    className="bg-wine hover:bg-wine-soft mt-7 w-full rounded-full py-3.5 text-sm font-semibold text-white transition disabled:opacity-50"
+                                    className="bg-magenta hover:bg-magenta-deep mt-7 w-full rounded-full py-3.5 text-sm font-semibold text-white transition disabled:opacity-50"
                                 >
                                     {processing ? 'Saving…' : 'Save'}
                                 </button>

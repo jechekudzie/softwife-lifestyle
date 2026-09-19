@@ -11,6 +11,7 @@ import {
     Wallet,
 } from 'lucide-react';
 import { RevenueChart, type DailyPoint } from '@/components/admin/charts';
+import { StageTag } from '@/components/admin/status';
 import { SMark } from '@/components/storefront/brand';
 import AdminLayout from '@/layouts/admin-layout';
 
@@ -50,18 +51,15 @@ type LowStock = {
 const money = (value: number) =>
     `$${value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
-function Delta({
-    value,
-    quiet = false,
-}: {
-    value: number | null;
-    quiet?: boolean;
-}) {
+/**
+ * A movement against the period before. Carries the comparison wording itself,
+ * so a day with no baseline says so plainly rather than leaving a dangling
+ * "against yesterday" with no figure in front of it.
+ */
+function Delta({ value, against }: { value: number | null; against?: string }) {
     if (value === null) {
         return (
-            <span className={quiet ? 'opacity-40' : 'text-butter/45'}>
-                nothing to compare
-            </span>
+            <span className="text-choc/40 text-xs">nothing to compare yet</span>
         );
     }
 
@@ -69,19 +67,18 @@ function Delta({
     const Icon = rising ? TrendingUp : TrendingDown;
 
     return (
-        <span
-            className={`flex items-center gap-1.5 ${
-                quiet
-                    ? rising
-                        ? 'text-wine'
-                        : 'text-magenta'
-                    : rising
-                      ? 'text-[var(--color-rose)]'
-                      : 'text-white/70'
-            }`}
-        >
-            <Icon className="h-3.5 w-3.5" />
-            {Math.abs(value)}%
+        <span className="flex items-center gap-1.5">
+            <span
+                className={`flex items-center gap-1.5 ${
+                    rising ? 'text-wine' : 'text-magenta'
+                }`}
+            >
+                <Icon className="h-3.5 w-3.5" />
+                {Math.abs(value)}%
+            </span>
+            {against ? (
+                <span className="text-choc/35 text-xs">against {against}</span>
+            ) : null}
         </span>
     );
 }
@@ -109,7 +106,7 @@ function Tile({
                     className={`flex h-9 w-9 items-center justify-center rounded-xl ${
                         urgent
                             ? 'bg-magenta/12 text-magenta'
-                            : 'bg-petal text-wine'
+                            : 'bg-rose/25 text-wine'
                     }`}
                 >
                     <Icon className="h-4 w-4" />
@@ -145,15 +142,6 @@ function Tile({
     );
 }
 
-const STATUS_TONE: Record<string, string> = {
-    pending: 'bg-magenta/12 text-magenta',
-    printing: 'bg-petal text-wine',
-    ready: 'bg-petal text-wine',
-    shipped: 'bg-wine/10 text-wine',
-    collected: 'bg-wine/10 text-wine',
-    cancelled: 'bg-choc/8 text-choc/50',
-};
-
 export default function AdminDashboard({
     greeting,
     today,
@@ -181,45 +169,42 @@ export default function AdminDashboard({
                 className="sw-grain relative overflow-hidden rounded-[1.75rem] px-8 py-9 sm:px-10"
                 style={{
                     background:
-                        'radial-gradient(120% 130% at 8% 0%, #7d2a44 0%, #6b2137 42%, #55172c 78%, #3d0f20 100%)',
+                        'radial-gradient(125% 135% at 4% 0%, #fff8ef 0%, #fce4ee 34%, #f6c9dd 72%, #eeb2ce 100%)',
                 }}
             >
                 <SMark
-                    color="var(--color-butter)"
+                    color="var(--color-wine)"
                     className="pointer-events-none absolute -right-10 -bottom-24 hidden h-[240%] sm:block"
-                    style={{ opacity: 0.05 }}
+                    style={{ opacity: 0.09 }}
                 />
 
                 <div className="relative flex flex-wrap items-end justify-between gap-8">
                     <div>
-                        <p className="text-butter/60 text-[0.62rem] font-semibold tracking-[0.28em] uppercase">
+                        <p className="text-wine/55 text-[0.62rem] font-semibold tracking-[0.28em] uppercase">
                             {greeting}
                         </p>
-                        <p className="font-display text-butter mt-3 text-[clamp(2.4rem,5vw,3.6rem)] leading-none font-bold tabular-nums">
+                        <p className="font-display text-wine mt-3 text-[clamp(2.4rem,5vw,3.6rem)] leading-none font-bold tabular-nums">
                             {money(today.revenue)}
                         </p>
                         <p className="mt-3 flex flex-wrap items-center gap-4 text-sm">
-                            <span className="text-butter/65">
+                            <span className="text-choc/60">
                                 {today.orders}{' '}
                                 {today.orders === 1 ? 'order' : 'orders'} today
                             </span>
-                            <Delta value={today.change} />
-                            <span className="text-butter/35 text-xs">
-                                against yesterday
-                            </span>
+                            <Delta value={today.change} against="yesterday" />
                         </p>
                     </div>
 
                     <div className="flex flex-wrap gap-3">
                         <Link
                             href="/admin/orders?status=pending"
-                            className="bg-butter text-wine rounded-full px-6 py-3 text-sm font-semibold transition hover:bg-white"
+                            className="bg-magenta hover:bg-magenta-deep rounded-full px-6 py-3 text-sm font-semibold text-white transition"
                         >
                             {stats.pending} to action
                         </Link>
                         <Link
                             href="/admin/analytics"
-                            className="text-butter flex items-center gap-2 rounded-full border border-white/25 px-6 py-3 text-sm font-semibold transition hover:bg-white/10"
+                            className="border-wine/25 text-wine flex items-center gap-2 rounded-full border bg-white/60 px-6 py-3 text-sm font-semibold transition hover:bg-white"
                         >
                             Analytics
                             <ArrowRight className="h-4 w-4" />
@@ -233,7 +218,12 @@ export default function AdminDashboard({
                     icon={Wallet}
                     label="Last 7 days"
                     value={money(stats.week)}
-                    hint={<Delta value={stats.weekChange} quiet />}
+                    hint={
+                        <Delta
+                            value={stats.weekChange}
+                            against="the 7 before"
+                        />
+                    }
                 />
                 <Tile
                     icon={Receipt}
@@ -315,7 +305,7 @@ export default function AdminDashboard({
                                         href={`/admin/orders/${order.reference}`}
                                         className="hover:bg-petal/50 flex items-center gap-4 px-6 py-3.5 transition"
                                     >
-                                        <span className="bg-wine flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-semibold text-white">
+                                        <span className="bg-magenta flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-xs font-semibold text-white">
                                             {order.customerName
                                                 .charAt(0)
                                                 .toUpperCase()}
@@ -331,13 +321,8 @@ export default function AdminDashboard({
                                             </span>
                                         </span>
 
-                                        <span
-                                            className={`hidden rounded-full px-2.5 py-1 text-[0.58rem] tracking-[0.14em] uppercase sm:inline ${
-                                                STATUS_TONE[order.status] ??
-                                                'bg-choc/8'
-                                            }`}
-                                        >
-                                            {order.status}
+                                        <span className="hidden sm:inline">
+                                            <StageTag status={order.status} />
                                         </span>
 
                                         <span className="w-20 text-right text-sm font-medium tabular-nums">
@@ -393,7 +378,7 @@ export default function AdminDashboard({
                                         className={`rounded-full px-2.5 py-1 text-xs font-semibold tabular-nums ${
                                             variant.stock === 0
                                                 ? 'bg-magenta/12 text-magenta'
-                                                : 'bg-petal text-wine'
+                                                : 'bg-rose/25 text-wine'
                                         }`}
                                     >
                                         {variant.stock === 0

@@ -121,4 +121,29 @@ class ProductManagementTest extends TestCase
 
         $this->assertSame(7, $variant->refresh()->stock);
     }
+
+    public function test_the_line_sheet_carries_colourways_and_a_sold_out_count(): void
+    {
+        $colourway = Colourway::factory()->create(['cloth' => '#e6a9c1']);
+        $this->product->colourways()->attach($colourway);
+
+        ProductVariant::factory()->create([
+            'product_id' => $this->product->id,
+            'colourway_id' => $colourway->id,
+            'size' => 'S',
+            'stock' => 6,
+        ]);
+        ProductVariant::factory()->create([
+            'product_id' => $this->product->id,
+            'colourway_id' => $colourway->id,
+            'size' => 'M',
+            'stock' => 0,
+        ]);
+
+        $this->get(route('admin.products.index'))
+            ->assertInertia(fn ($page) => $page
+                ->where('products.0.stock', 6)
+                ->where('products.0.soldOut', 1)
+                ->where('products.0.colourways.0.cloth', '#e6a9c1'));
+    }
 }

@@ -102,7 +102,7 @@ export default function Analytics({
                             }
                             className={`rounded-full border px-4 py-2 text-xs font-medium transition ${
                                 days === range
-                                    ? 'border-wine bg-wine text-white'
+                                    ? 'border-magenta bg-magenta text-white'
                                     : 'border-wine/20 hover:border-wine/50'
                             }`}
                         >
@@ -112,7 +112,7 @@ export default function Analytics({
                 </div>
             }
         >
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
                 <Stat
                     label="Revenue"
                     value={`$${headline.revenue.toFixed(2)}`}
@@ -142,8 +142,11 @@ export default function Analytics({
                     label="Profit"
                     value={`$${headline.profit.toFixed(2)}`}
                     hint={
-                        headline.costCoverage !== null &&
-                        headline.costCoverage < 100 ? (
+                        headline.costCoverage === null ? (
+                            <span className="text-magenta">
+                                No landed cost recorded yet
+                            </span>
+                        ) : headline.costCoverage < 100 ? (
                             <span className="text-magenta">
                                 Costs known for {headline.costCoverage}% of
                                 pieces sold
@@ -198,7 +201,12 @@ export default function Analytics({
                     <Card title="Orders by status">
                         <BarList
                             rows={Object.entries(byStatus).map(
-                                ([label, value]) => ({ label, value }),
+                                ([label, value]) => ({
+                                    label:
+                                        label.charAt(0).toUpperCase() +
+                                        label.slice(1),
+                                    value,
+                                }),
                             )}
                             format={(value) => String(value)}
                         />

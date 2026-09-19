@@ -7,11 +7,13 @@ import {
     Factory,
     LayoutDashboard,
     LogOut,
+    Menu,
     Package,
     Receipt,
     Store,
     Truck,
     UserRound,
+    X,
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { SMark, Wordmark } from '@/components/storefront/brand';
@@ -154,7 +156,7 @@ function UserMenu({ auth }: { auth: Auth }) {
                 aria-expanded={open}
                 className="border-wine/15 hover:border-wine/40 flex items-center gap-2.5 rounded-full border py-1.5 pr-3 pl-1.5 transition"
             >
-                <span className="bg-wine flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold text-white">
+                <span className="bg-magenta flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold text-white">
                     {name.charAt(0).toUpperCase()}
                 </span>
                 <span className="hidden text-sm font-medium sm:inline">
@@ -266,7 +268,7 @@ function Flash() {
     }
 
     return (
-        <div className="border-wine/20 bg-petal text-wine mb-8 rounded-xl border px-5 py-3.5 text-sm">
+        <div className="border-wine/20 bg-rose/25 text-wine mb-8 rounded-xl border px-5 py-3.5 text-sm">
             {flash.success}
         </div>
     );
@@ -288,21 +290,57 @@ export default function AdminLayout({
     const alerts = page.props.adminAlerts as Alerts;
     const auth = page.props.auth as Auth;
 
+    /**
+     * On a phone the rail is a drawer. Left open it pushed every page a full
+     * screen down, so the whole menu had to be scrolled past to reach the work.
+     */
+    const [navOpen, setNavOpen] = useState(false);
+
     return (
         <>
             <Head title={`${title} · Admin`} />
 
             <div className="bg-bone text-choc min-h-screen font-sans lg:flex">
-                <aside className="bg-wine text-butter lg:sticky lg:top-0 lg:h-screen lg:w-64 lg:shrink-0">
-                    <div className="flex items-center gap-2.5 px-6 py-6">
-                        <SMark color="var(--color-rose)" className="h-6 w-6" />
-                        <Wordmark
-                            color="var(--color-butter)"
-                            className="h-3 w-24"
-                        />
+                <aside
+                    className="border-wine/10 text-wine border-r lg:sticky lg:top-0 lg:h-screen lg:w-64 lg:shrink-0"
+                    style={{
+                        background:
+                            'linear-gradient(180deg, #fdf0f5 0%, #f9dde9 62%, #f4cfdf 100%)',
+                    }}
+                >
+                    <div className="flex items-center justify-between px-6 py-5 lg:py-6">
+                        <span className="flex items-center gap-2.5">
+                            <SMark
+                                color="var(--color-magenta)"
+                                className="h-6 w-6"
+                            />
+                            <Wordmark
+                                color="var(--color-wine)"
+                                className="h-3 w-24"
+                            />
+                        </span>
+
+                        <button
+                            type="button"
+                            onClick={() => setNavOpen((open) => !open)}
+                            aria-expanded={navOpen}
+                            className="border-wine/20 flex h-9 w-9 items-center justify-center rounded-full border lg:hidden"
+                        >
+                            {navOpen ? (
+                                <X className="h-4 w-4" />
+                            ) : (
+                                <Menu className="h-4 w-4" />
+                            )}
+                            <span className="sr-only">
+                                {navOpen ? 'Close menu' : 'Open menu'}
+                            </span>
+                        </button>
                     </div>
 
-                    <nav className="px-3 pb-6">
+                    <nav
+                        className={`px-3 pb-6 lg:block ${navOpen ? '' : 'hidden'}`}
+                        onClick={() => setNavOpen(false)}
+                    >
                         <ul className="space-y-1">
                             {NAV.map(({ href, label, icon: Icon, match }) => {
                                 const active = match.test(url);
@@ -313,8 +351,8 @@ export default function AdminLayout({
                                             href={href}
                                             className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition ${
                                                 active
-                                                    ? 'bg-butter/15 font-semibold'
-                                                    : 'opacity-70 hover:bg-white/10 hover:opacity-100'
+                                                    ? 'text-magenta bg-white font-semibold shadow-[0_6px_16px_-10px_rgba(107,33,55,0.6)]'
+                                                    : 'opacity-65 hover:bg-white/60 hover:opacity-100'
                                             }`}
                                         >
                                             <Icon className="h-4 w-4" />
@@ -325,7 +363,7 @@ export default function AdminLayout({
                             })}
                         </ul>
 
-                        <div className="border-butter/15 mt-6 border-t pt-4">
+                        <div className="border-wine/12 mt-6 border-t pt-4">
                             <a
                                 href="/"
                                 className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm opacity-60 transition hover:opacity-100"
