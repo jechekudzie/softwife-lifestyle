@@ -1,15 +1,6 @@
 import { Head } from '@inertiajs/react';
-import { Gift, RotateCcw, ShieldCheck, Truck } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import {
-    Garment,
-    Lockup,
-    Polaroid,
-    Scallop,
-    Script,
-    SectionHeading,
-    SMark,
-} from '@/components/storefront/brand';
+import { Lockup, Polaroid, Script, SMark } from '@/components/storefront/brand';
 import { StorefrontHeader } from '@/components/storefront/header';
 import { Photo } from '@/components/storefront/photo';
 import { StorefrontFooter } from '@/components/storefront/footer';
@@ -473,10 +464,7 @@ function BestSellers() {
             <div className="mx-auto max-w-6xl px-6 pt-24 pb-24 sm:pt-28 sm:pb-32">
                 <div className="sw-reveal text-center">
                     <p className="font-display text-[clamp(1.9rem,4.6vw,3.1rem)] leading-[1.12]">
-                        Four lines. One{' '}
-                        <Script className="text-magenta text-[1.4em]">
-                            wardrobe
-                        </Script>
+                        Four lines. One wardrobe.
                     </p>
                     <p className="mx-auto mt-5 max-w-[34em] text-sm leading-relaxed opacity-60">
                         Heavyweight cotton, printed in small runs. Choose the
@@ -512,52 +500,44 @@ function BestSellers() {
 /** The product-type axis. Tees ship today; the rest are in production. */
 function Categories() {
     return (
-        <section className="bg-bone px-6 py-24 sm:py-32">
+        <section className="bg-bone px-6 py-24 sm:py-28">
             <div className="mx-auto max-w-6xl">
                 <h2 className="font-display sw-reveal max-w-[13em] text-[clamp(1.9rem,4.4vw,3rem)] leading-[1.1]">
                     One affirmation, worn every way you live.
                 </h2>
 
-                <ul className="mt-14 grid gap-8 sm:grid-cols-3">
-                    {CATEGORIES.map((category, index) => (
+                {/*
+                 * Rules rather than cards. Drawing a tracksuit we have never
+                 * photographed was the least honest thing on the page, and
+                 * illustrated clip-art beside real photography reads cheap.
+                 */}
+                <ul className="mt-14 grid gap-x-10 gap-y-10 sm:grid-cols-3">
+                    {CATEGORIES.map((category) => (
                         <li
                             key={category.name}
-                            className="sw-reveal"
-                            style={{ transitionDelay: `${index * 90}ms` }}
+                            className="sw-reveal border-wine/15 border-t pt-6"
                         >
-                            <div
-                                className="flex items-center justify-center rounded-[1.75rem] px-8 py-12"
-                                style={{
-                                    backgroundColor: category.available
-                                        ? 'var(--color-petal)'
-                                        : 'color-mix(in oklab, var(--color-wine) 10%, var(--color-petal))',
-                                }}
-                            >
-                                <div className="w-full max-w-[12rem]">
-                                    <Garment
-                                        cloth={
-                                            category.available
-                                                ? 'var(--color-butter)'
-                                                : 'var(--color-bone)'
-                                        }
-                                        silhouette={category.silhouette}
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="mt-6 flex items-baseline justify-between gap-4">
-                                <h3 className="font-display text-xl font-bold">
+                            <p className="flex items-baseline gap-3">
+                                <span className="font-display text-[clamp(1.5rem,2.6vw,2rem)] leading-none font-bold">
                                     {category.name}
-                                </h3>
-                                <span className="text-[0.62rem] font-medium tracking-[0.24em] uppercase opacity-50">
-                                    {category.available
-                                        ? 'In stock'
-                                        : 'Coming soon'}
                                 </span>
-                            </div>
-                            <p className="mt-2 text-sm leading-relaxed opacity-60">
+                                {!category.available ? (
+                                    <span className="text-xs whitespace-nowrap opacity-45">
+                                        from March
+                                    </span>
+                                ) : null}
+                            </p>
+                            <p className="mt-3 max-w-[22em] text-sm leading-relaxed opacity-60">
                                 {category.blurb}
                             </p>
+                            {category.available ? (
+                                <a
+                                    href="/shop"
+                                    className="border-wine/30 hover:border-wine mt-5 inline-block border-b pb-0.5 text-sm font-medium transition"
+                                >
+                                    Shop tees
+                                </a>
+                            ) : null}
                         </li>
                     ))}
                 </ul>
@@ -679,10 +659,7 @@ function Ritual() {
         <section className="bg-petal px-6 py-24 sm:py-32">
             <div className="mx-auto max-w-5xl">
                 <p className="font-display sw-reveal mx-auto max-w-[14em] text-center text-[clamp(1.9rem,4.6vw,3rem)] leading-[1.12]">
-                    Choose, wear,{' '}
-                    <Script className="text-magenta text-[1.4em]">
-                        speak life
-                    </Script>
+                    Choose, wear, speak life over yourself.
                 </p>
 
                 <ol className="mt-16 grid gap-10 sm:grid-cols-3">
@@ -717,9 +694,9 @@ function Reviews() {
     return (
         <section className="bg-rose sw-grain relative px-6 py-24 sm:py-32">
             <div className="relative mx-auto max-w-6xl">
-                <SectionHeading className="sw-reveal text-center text-white">
-                    Kind words
-                </SectionHeading>
+                <p className="font-display sw-reveal mx-auto max-w-[16em] text-center text-[clamp(1.7rem,4vw,2.5rem)] leading-[1.15] text-white">
+                    What she said, wearing it.
+                </p>
 
                 <ul className="mt-16 grid gap-10 sm:grid-cols-3">
                     {REVIEWS.map((review, index) => (
@@ -742,33 +719,6 @@ function Reviews() {
                     ))}
                 </ul>
             </div>
-        </section>
-    );
-}
-
-const SERVICES = [
-    { icon: Truck, label: 'Regional delivery' },
-    { icon: RotateCcw, label: 'Easy exchanges' },
-    { icon: Gift, label: 'Gift wrapping' },
-    { icon: ShieldCheck, label: 'Secure payment' },
-];
-
-function Services() {
-    return (
-        <section className="bg-bone px-6 py-16">
-            <ul className="mx-auto grid max-w-5xl grid-cols-2 gap-8 sm:grid-cols-4">
-                {SERVICES.map(({ icon: Icon, label }) => (
-                    <li
-                        key={label}
-                        className="flex flex-col items-center gap-3 text-center"
-                    >
-                        <Icon className="text-wine h-5 w-5" />
-                        <span className="text-[0.7rem] font-medium tracking-[0.2em] uppercase opacity-65">
-                            {label}
-                        </span>
-                    </li>
-                ))}
-            </ul>
         </section>
     );
 }
@@ -832,12 +782,20 @@ export default function Home({ variant }: { variant?: HeroVariant }) {
                     onToggleSound={toggleSound}
                 />
 
-                <Scallop fill="var(--color-magenta)" />
-
                 <section
                     id="affirmations"
-                    className="bg-magenta sw-grain relative px-6 pt-20 pb-28 sm:pt-24 sm:pb-36"
+                    className="bg-magenta sw-grain relative px-6 py-28 sm:py-36"
                 >
+                    <div className="relative mx-auto mb-20 max-w-[24em] text-center">
+                        <p className="font-display text-butter text-[clamp(1.7rem,4vw,2.4rem)] leading-[1.15]">
+                            Words to say back to yourself.
+                        </p>
+                        <p className="text-butter/60 mt-4 text-sm leading-relaxed">
+                            Written for the season you are in, and printed on
+                            the pieces you wear through it.
+                        </p>
+                    </div>
+
                     <div className="relative mx-auto grid max-w-5xl gap-x-16 gap-y-20 sm:grid-cols-2">
                         {AFFIRMATIONS.map((line, index) => (
                             <blockquote
@@ -848,17 +806,14 @@ export default function Home({ variant }: { variant?: HeroVariant }) {
                                 <p className="font-display mx-auto max-w-[19em] text-[clamp(1.1rem,2.4vw,1.5rem)] leading-[1.5] italic">
                                     {line}
                                 </p>
-                                <cite className="mt-6 block text-[0.56rem] font-medium tracking-[0.36em] uppercase not-italic opacity-55">
-                                    Softwife affirmations
-                                </cite>
+                                <span
+                                    aria-hidden="true"
+                                    className="bg-butter/30 mx-auto mt-7 block h-px w-10"
+                                />
                             </blockquote>
                         ))}
                     </div>
                 </section>
-
-                <Scallop fill="var(--color-magenta)" flip />
-
-                <Services />
 
                 <section className="bg-petal px-6 py-24 text-center sm:py-28">
                     <h2 className="font-display sw-reveal mx-auto max-w-[14em] text-[clamp(1.6rem,3.8vw,2.5rem)] leading-[1.15]">
