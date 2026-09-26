@@ -60,15 +60,12 @@ function Hero() {
                 />
             </div>
 
-            {/* A warm scrim under the type, wide screens only. */}
-            <div
-                aria-hidden="true"
-                className="absolute inset-0 -z-10 hidden md:block"
-                style={{
-                    background:
-                        'linear-gradient(180deg, rgba(253,240,245,0) 32%, rgba(253,240,245,0.26) 58%, rgba(253,240,245,0.62) 80%, rgba(253,240,245,0.82) 100%)',
-                }}
-            />
+            {/*
+             * No veil over the frame. Every wash tried here drained the
+             * courtyard of the light it was shot in, so the type carries its
+             * own legibility instead: a glow behind the line, a fill behind
+             * each button.
+             */}
 
             <div className="relative flex w-full flex-col items-center px-6 pt-5 pb-7 text-center sm:px-12 md:h-full md:justify-end md:pt-32 md:pb-8">
                 <div className="sw-rise flex flex-col items-center">
@@ -76,7 +73,13 @@ function Hero() {
                         Softwife Lifestyle — affirmation apparel for women
                     </h1>
 
-                    <p className="font-display text-wine text-[clamp(1.45rem,6vw,2.8rem)] leading-[1.2] italic">
+                    <p
+                        className="font-display text-wine text-[clamp(1.45rem,6vw,2.8rem)] leading-[1.2] italic"
+                        style={{
+                            textShadow:
+                                '0 1px 22px rgba(255,251,247,0.95), 0 1px 4px rgba(255,251,247,0.9)',
+                        }}
+                    >
                         in my soft era
                     </p>
 
