@@ -100,6 +100,9 @@ function Hero() {
     );
 }
 
+/** The marquee is parked until the brand wants it back. */
+const SHOW_RIBBON = false;
+
 function Ribbon() {
     const strip = [...RIBBON, ...RIBBON, ...RIBBON];
 
@@ -130,10 +133,6 @@ function BestSellers() {
                 <div className="sw-reveal text-center">
                     <p className="font-display text-[clamp(1.9rem,4.6vw,3.1rem)] leading-[1.12]">
                         Four lines. One wardrobe.
-                    </p>
-                    <p className="mx-auto mt-5 max-w-[34em] text-sm leading-relaxed opacity-60">
-                        Heavyweight cotton, printed in small runs. Choose the
-                        words for the season you are in.
                     </p>
                 </div>
 
@@ -421,7 +420,7 @@ export default function Home({ hero }: { hero?: 'travelling' }) {
 
                 {hero === 'travelling' ? <TravellingHero /> : <Hero />}
 
-                <Ribbon />
+                {SHOW_RIBBON ? <Ribbon /> : null}
 
                 <BestSellers />
 
