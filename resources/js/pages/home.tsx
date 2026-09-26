@@ -39,52 +39,38 @@ import {
  */
 function Hero() {
     return (
-        <section className="relative isolate flex min-h-[34rem] items-end overflow-hidden md:h-[min(55vw,92svh)] md:min-h-[32rem]">
-            <picture className="absolute inset-0 -z-20">
-                <source
-                    media="(min-width: 768px)"
-                    type="image/webp"
-                    srcSet="/media/hero/courtyard-wide-640.webp 640w, /media/hero/courtyard-wide-960.webp 960w, /media/hero/courtyard-wide-1280.webp 1280w, /media/hero/courtyard-wide-1698.webp 1698w"
-                    sizes="100vw"
-                />
-                <source
-                    type="image/webp"
-                    srcSet="/media/hero/courtyard-tall-620.webp 620w, /media/hero/courtyard-tall-900.webp 900w"
-                    sizes="100vw"
-                />
+        <section className="bg-petal relative isolate overflow-hidden md:flex md:h-[min(64.5vw,94svh)] md:items-end">
+            {/*
+             * On a phone the banner is landscape and the screen is not, so it
+             * sits whole across the top and the type takes the rose ground
+             * beneath it. Nothing is cropped and nothing is buried.
+             *
+             * From `md` up the shapes agree, and the section takes the frame's
+             * own proportions so `cover` has nothing left to crop.
+             */}
+            <div className="relative md:absolute md:inset-0 md:-z-20">
                 <img
-                    src="/media/hero/courtyard-wide-1280.jpg"
+                    src="/media/hero/courtyard-1280.jpg"
+                    srcSet="/media/hero/courtyard-540.webp 540w, /media/hero/courtyard-780.webp 780w, /media/hero/courtyard-960.webp 960w, /media/hero/courtyard-1280.webp 1280w, /media/hero/courtyard-1698.webp 1698w"
+                    sizes="100vw"
                     alt="Four women in Softwife tees in a sunlit courtyard"
-                    /*
-                     * A touch of growth from the top edge on phones, enough
-                     * to drop the faces clear of the floating nav without
-                     * closing in on anyone.
-                     */
-                    className="h-full w-full origin-top scale-[1.03] object-cover md:scale-100"
-                    style={{
-                        objectPosition: '50% 0%',
-                        filter: 'saturate(1.04)',
-                    }}
+                    className="w-full object-cover md:h-full"
                     fetchPriority="high"
                     decoding="sync"
                 />
-            </picture>
+            </div>
 
-            {/*
-             * A warm scrim rising from the foot of the frame, and nothing
-             * across the rest of it. The photograph keeps its own colour;
-             * only the ground the type stands on is darkened.
-             */}
+            {/* A warm scrim under the type, wide screens only. */}
             <div
                 aria-hidden="true"
-                className="absolute inset-0 -z-10"
+                className="absolute inset-0 -z-10 hidden md:block"
                 style={{
                     background:
-                        'linear-gradient(180deg, rgba(39,24,20,0) 28%, rgba(45,20,30,0.30) 52%, rgba(42,16,26,0.74) 76%, rgba(34,10,20,0.92) 100%)',
+                        'linear-gradient(180deg, rgba(39,24,20,0) 28%, rgba(45,20,30,0.42) 54%, rgba(42,16,26,0.80) 74%, rgba(34,10,20,0.94) 100%)',
                 }}
             />
 
-            <div className="relative flex w-full flex-col items-center px-6 pt-28 pb-9 text-center sm:px-12 md:pt-32 md:pb-10 lg:pb-12">
+            <div className="relative flex w-full flex-col items-center px-6 pt-10 pb-14 text-center sm:px-12 md:h-full md:justify-end md:pt-32 md:pb-8">
                 <div className="sw-rise flex flex-col items-center">
                     <h1 className="sr-only">
                         Softwife Lifestyle — affirmation apparel for women
@@ -93,20 +79,17 @@ function Hero() {
                     <Lockup
                         color="var(--color-magenta)"
                         align="center"
-                        className="w-full max-w-[20rem] sm:max-w-[26rem]"
+                        className="w-full max-w-[19rem] sm:max-w-[26rem]"
                         style={{
-                            filter: 'drop-shadow(0 6px 26px rgba(34,10,20,0.75))',
+                            filter: 'drop-shadow(0 6px 26px rgba(34,10,20,0.35))',
                         }}
                     />
 
-                    <p
-                        className="font-display text-butter mt-5 text-[clamp(1.1rem,2.4vw,1.6rem)] leading-[1.35] italic"
-                        style={{ textShadow: '0 2px 18px rgba(34,10,20,0.7)' }}
-                    >
+                    <p className="font-display text-wine md:text-butter mt-5 text-[clamp(1.1rem,2.4vw,1.6rem)] leading-[1.35] italic">
                         in my soft wife era
                     </p>
 
-                    <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+                    <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
                         <a
                             href="/shop"
                             className="bg-magenta hover:bg-magenta-deep rounded-full px-9 py-4 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 focus-visible:ring-4 focus-visible:ring-white/60 focus-visible:outline-none"
@@ -115,7 +98,7 @@ function Hero() {
                         </a>
                         <a
                             href="#story"
-                            className="text-butter border-butter/55 hover:bg-butter rounded-full border px-9 py-4 text-sm font-semibold transition duration-300 hover:text-[var(--color-wine)] focus-visible:ring-4 focus-visible:ring-white/60 focus-visible:outline-none"
+                            className="text-wine border-wine/40 hover:bg-wine md:text-butter md:border-butter/55 md:hover:bg-butter rounded-full border px-9 py-4 text-sm font-semibold transition duration-300 hover:text-white focus-visible:ring-4 focus-visible:ring-white/60 focus-visible:outline-none md:hover:text-[var(--color-wine)]"
                         >
                             Our story
                         </a>
