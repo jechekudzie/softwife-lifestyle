@@ -1,12 +1,11 @@
 import { Check, PenLine, X } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Garment, Print } from '@/components/storefront/brand';
 import { ProductGallery } from '@/components/storefront/product-gallery';
-import { CUSTOM_AFFIRMATION_FEE, CUSTOM_LEAD_TIME, useCart } from '@/lib/cart';
+import { MAX_CUSTOM, useBuyForm } from '@/lib/buy';
+import { CUSTOM_AFFIRMATION_FEE, CUSTOM_LEAD_TIME } from '@/lib/cart';
 import { formatPrice, SIZES, type AffirmationLine } from '@/lib/storefront';
-
-const MAX_CUSTOM = 180;
 
 /**
  * The add-to-bag sheet.
@@ -26,18 +25,23 @@ export function AddToBag({
     line: AffirmationLine;
     onClose: () => void;
 }) {
-    const { add } = useCart();
-    const [colourway, setColourway] = useState(0);
-    const [size, setSize] = useState<string | null>(null);
-    const [wantsCustom, setWantsCustom] = useState(false);
-    const [custom, setCustom] = useState('');
-    const [added, setAdded] = useState(false);
-
-    const active = line.colourways[colourway];
-    const customText = custom.trim();
-    const customReady = !wantsCustom || customText.length >= 8;
-    const total =
-        line.price + (wantsCustom && customText ? CUSTOM_AFFIRMATION_FEE : 0);
+    const buy = useBuyForm(line, onClose);
+    const {
+        colourway,
+        setColourway,
+        active,
+        size,
+        setSize,
+        wantsCustom,
+        setWantsCustom,
+        custom,
+        setCustom,
+        customText,
+        customReady,
+        total,
+        added,
+        submit,
+    } = buy;
 
     useEffect(() => {
         const onKey = (event: KeyboardEvent) => {
@@ -54,27 +58,6 @@ export function AddToBag({
             document.body.style.overflow = '';
         };
     }, [onClose]);
-
-    const submit = () => {
-        if (!size || !customReady) {
-            return;
-        }
-
-        add({
-            slug: line.slug,
-            name: line.name,
-            colourway: active.name,
-            cloth: active.cloth,
-            ink: active.ink,
-            size,
-            photo: line.photo,
-            basePrice: line.price,
-            custom: wantsCustom && customText ? customText : null,
-        });
-
-        setAdded(true);
-        window.setTimeout(onClose, 900);
-    };
 
     const sheet = (
         <div
@@ -207,7 +190,7 @@ export function AddToBag({
                             onChange={(event) =>
                                 setWantsCustom(event.target.checked)
                             }
-                            className="accent-wine mt-0.5 h-4 w-4"
+                            className="accent-magenta mt-0.5 h-4 w-4"
                         />
                         <span>
                             <span className="flex items-center gap-2 text-sm font-semibold">
@@ -287,6 +270,13 @@ export function AddToBag({
                         Choose a size first.
                     </p>
                 ) : null}
+
+                <a
+                    href={`/shop/${line.slug}`}
+                    className="border-wine/12 mt-6 block border-t pt-5 text-center text-xs font-medium underline-offset-4 opacity-60 transition hover:underline hover:opacity-100"
+                >
+                    See every photograph of {line.name}
+                </a>
             </div>
         </div>
     );

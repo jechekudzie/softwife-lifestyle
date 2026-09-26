@@ -21,6 +21,7 @@ Route::get('/', [StorefrontController::class, 'home'])->name('home');
 /** The same page with the older hero, where each line brings its own ground. */
 Route::get('dark', fn () => app(StorefrontController::class)->home('travelling'))->name('home.dark');
 Route::get('shop', [StorefrontController::class, 'shop'])->name('shop');
+Route::get('shop/{product:slug}', [StorefrontController::class, 'product'])->name('product');
 Route::inertia('cart', 'cart')->name('cart');
 Route::get('checkout', [CheckoutController::class, 'index'])->name('checkout');
 Route::post('checkout', [CheckoutController::class, 'store'])->name('checkout.store');

@@ -75,4 +75,34 @@ class StorefrontCatalogueTest extends TestCase
         $this->get(route('shop'))
             ->assertInertia(fn ($page) => $page->where('catalogue.0.name', 'Becoming Softwife'));
     }
+
+    public function test_a_product_has_a_page_of_its_own(): void
+    {
+        $product = Product::factory()->create(['name' => 'Soft Babe']);
+        Product::factory()->create(['name' => 'Soft Mom']);
+
+        $this->get(route('product', $product))
+            ->assertOk()
+            ->assertInertia(fn ($page) => $page
+                ->component('shop/show')
+                ->where('line.name', 'Soft Babe')
+                ->where('related.0.name', 'Soft Mom'));
+    }
+
+    public function test_a_hidden_product_has_no_page(): void
+    {
+        $product = Product::factory()->create(['is_active' => false]);
+
+        $this->get(route('product', $product))->assertNotFound();
+    }
+
+    public function test_a_page_carries_the_same_shape_as_a_listing(): void
+    {
+        $product = Product::factory()->create();
+
+        $listed = $this->get(route('shop'))->viewData('page')['props']['lines'][0];
+        $shown = $this->get(route('product', $product))->viewData('page')['props']['line'];
+
+        $this->assertSame(array_keys($listed), array_keys($shown));
+    }
 }

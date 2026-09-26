@@ -1,3 +1,4 @@
+import { Link } from '@inertiajs/react';
 import { Heart, ShoppingBag } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { AddToBag } from '@/components/storefront/add-to-bag';
@@ -63,6 +64,11 @@ export function ProductCard({ line }: { line: AffirmationLine }) {
     return (
         <article className="group flex h-full flex-col">
             <div className="relative overflow-hidden rounded-[1.25rem] bg-white shadow-[0_26px_50px_-30px_rgba(39,24,20,0.5)]">
+                <Link
+                    href={`/shop/${line.slug}`}
+                    aria-label={`See ${line.name}`}
+                    className="absolute inset-0 z-10 focus-visible:ring-4 focus-visible:ring-[var(--color-rose)] focus-visible:outline-none"
+                />
                 {line.images.length ? (
                     <ProductGallery
                         images={line.images}
@@ -112,7 +118,7 @@ export function ProductCard({ line }: { line: AffirmationLine }) {
                         type="button"
                         onClick={() => setSaved((value) => !value)}
                         aria-pressed={saved}
-                        className="-m-2 rounded-full p-2 transition focus-visible:ring-4 focus-visible:ring-white/60 focus-visible:outline-none"
+                        className="relative z-20 -m-2 rounded-full p-2 transition focus-visible:ring-4 focus-visible:ring-white/60 focus-visible:outline-none"
                         style={{ opacity: saved ? 1 : 0.75 }}
                     >
                         <Heart
@@ -128,7 +134,7 @@ export function ProductCard({ line }: { line: AffirmationLine }) {
                 <button
                     type="button"
                     onClick={() => setAdding(true)}
-                    className="bg-wine hover:bg-wine-soft absolute right-4 bottom-4 flex h-11 w-11 items-center justify-center rounded-full text-white opacity-0 transition duration-300 group-hover:opacity-100 focus-visible:opacity-100 focus-visible:ring-4 focus-visible:ring-white/60 focus-visible:outline-none"
+                    className="bg-wine hover:bg-wine-soft absolute right-4 bottom-4 z-20 flex h-11 w-11 items-center justify-center rounded-full text-white opacity-0 transition duration-300 group-hover:opacity-100 focus-visible:opacity-100 focus-visible:ring-4 focus-visible:ring-white/60 focus-visible:outline-none"
                 >
                     <ShoppingBag className="h-4 w-4" />
                     <span className="sr-only">Add {line.name} to bag</span>
@@ -138,7 +144,12 @@ export function ProductCard({ line }: { line: AffirmationLine }) {
             <div className="mt-4 flex flex-1 flex-col px-1">
                 <div className="flex items-baseline justify-between gap-3">
                     <h3 className="font-display text-lg font-bold">
-                        {line.name}
+                        <Link
+                            href={`/shop/${line.slug}`}
+                            className="transition hover:opacity-65 focus-visible:ring-4 focus-visible:ring-[var(--color-rose)] focus-visible:outline-none"
+                        >
+                            {line.name}
+                        </Link>
                     </h3>
                     <p className="flex items-baseline gap-2 text-sm">
                         {line.wasPrice ? (
@@ -196,7 +207,7 @@ export function ProductCard({ line }: { line: AffirmationLine }) {
                 <button
                     type="button"
                     onClick={() => setAdding(true)}
-                    className="border-wine/25 hover:bg-wine mt-5 w-full rounded-full border py-3 text-sm font-semibold transition duration-300 hover:text-white focus-visible:ring-4 focus-visible:ring-[var(--color-rose)] focus-visible:outline-none"
+                    className="border-wine/25 hover:bg-wine relative z-20 mt-5 w-full rounded-full border py-3 text-sm font-semibold transition duration-300 hover:text-white focus-visible:ring-4 focus-visible:ring-[var(--color-rose)] focus-visible:outline-none"
                 >
                     Choose your size
                 </button>
