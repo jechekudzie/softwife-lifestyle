@@ -13,11 +13,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-/** The homepage sits on one rose ground; the plates still travel. */
-Route::inertia('/', 'home', ['variant' => 'rose'])->name('home');
+/** The homepage: one still photograph behind the lockup. */
+Route::inertia('/', 'home')->name('home');
 
-/** The same page, letting each line bring its own ground. */
-Route::inertia('dark', 'home')->name('home.dark');
+/** The same page with the older hero, where each line brings its own ground. */
+Route::inertia('dark', 'home', ['hero' => 'travelling'])->name('home.dark');
 Route::inertia('shop', 'shop/index')->name('shop');
 Route::inertia('cart', 'cart')->name('cart');
 Route::get('checkout', [CheckoutController::class, 'index'])->name('checkout');
