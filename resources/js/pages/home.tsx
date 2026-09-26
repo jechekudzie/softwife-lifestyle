@@ -70,26 +70,26 @@ function Hero() {
                 }}
             />
 
-            <div className="relative flex w-full flex-col items-center px-6 pt-8 pb-10 text-center sm:px-12 md:h-full md:justify-end md:pt-32 md:pb-8">
+            <div className="relative flex w-full flex-col items-center px-6 pt-5 pb-7 text-center sm:px-12 md:h-full md:justify-end md:pt-32 md:pb-8">
                 <div className="sw-rise flex flex-col items-center">
                     <h1 className="sr-only">
                         Softwife Lifestyle — affirmation apparel for women
                     </h1>
 
-                    <p className="font-display text-wine md:text-butter text-[clamp(1.5rem,3.6vw,2.8rem)] leading-[1.25] italic">
+                    <p className="font-display text-wine md:text-butter text-[clamp(1.45rem,6vw,2.8rem)] leading-[1.2] italic">
                         in my soft wife era
                     </p>
 
-                    <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+                    <div className="mt-5 flex w-full flex-wrap items-center justify-center gap-3 md:mt-9">
                         <a
                             href="/shop"
-                            className="bg-magenta hover:bg-magenta-deep rounded-full px-9 py-4 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 focus-visible:ring-4 focus-visible:ring-white/60 focus-visible:outline-none"
+                            className="bg-magenta hover:bg-magenta-deep flex-1 rounded-full px-6 py-3.5 text-center text-sm font-semibold whitespace-nowrap text-white transition duration-300 hover:-translate-y-0.5 focus-visible:ring-4 focus-visible:ring-white/60 focus-visible:outline-none sm:flex-none sm:px-9 sm:py-4"
                         >
                             Shop the collection
                         </a>
                         <a
                             href="#story"
-                            className="text-wine border-wine/40 hover:bg-wine md:text-butter md:border-butter/55 md:hover:bg-butter rounded-full border px-9 py-4 text-sm font-semibold transition duration-300 hover:text-white focus-visible:ring-4 focus-visible:ring-white/60 focus-visible:outline-none md:hover:text-[var(--color-wine)]"
+                            className="text-wine border-wine/40 hover:bg-wine md:text-butter md:border-butter/55 md:hover:bg-butter flex-1 rounded-full border px-6 py-3.5 text-center text-sm font-semibold whitespace-nowrap transition duration-300 hover:text-white focus-visible:ring-4 focus-visible:ring-white/60 focus-visible:outline-none sm:flex-none sm:px-9 sm:py-4 md:hover:text-[var(--color-wine)]"
                         >
                             Our story
                         </a>
@@ -129,14 +129,14 @@ function Ribbon() {
 function BestSellers() {
     return (
         <section id="shop" className="bg-bone">
-            <div className="mx-auto max-w-6xl px-6 pt-12 pb-24 sm:pt-14 sm:pb-32">
+            <div className="mx-auto max-w-6xl px-6 pt-9 pb-20 sm:pt-14 sm:pb-32">
                 <div className="sw-reveal text-center">
-                    <p className="font-display text-[clamp(1.9rem,4.6vw,3.1rem)] leading-[1.12]">
+                    <p className="font-display text-[clamp(1.7rem,4.6vw,3.1rem)] leading-[1.12]">
                         Four lines. One wardrobe.
                     </p>
                 </div>
 
-                <ul className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-7">
+                <ul className="mt-7 grid gap-6 sm:mt-14 sm:grid-cols-2 lg:grid-cols-4 lg:gap-7">
                     {LINES.map((line, index) => (
                         <li
                             key={line.slug}

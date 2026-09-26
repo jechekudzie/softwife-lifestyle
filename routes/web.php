@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
 use App\Http\Controllers\Admin\FulfilmentController;
 use App\Http\Controllers\Admin\OrderController as AdminOrders;
 use App\Http\Controllers\Admin\ProductController as AdminProducts;
+use App\Http\Controllers\Admin\ProductImageController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Web\CheckoutController;
 use App\Http\Controllers\Web\OrderController;
@@ -44,6 +45,10 @@ Route::middleware(['auth', 'verified', 'admin'])
         Route::put('products/{product}', [AdminProducts::class, 'update'])->name('products.update');
         Route::put('products/{product}/stock', [AdminProducts::class, 'updateStock'])->name('products.stock');
         Route::post('products/{product}/batches', [AdminProducts::class, 'receiveBatch'])->name('products.batches');
+
+        Route::post('products/{product}/images', [ProductImageController::class, 'store'])->name('products.images.store');
+        Route::put('products/{product}/images/{image}', [ProductImageController::class, 'update'])->name('products.images.update');
+        Route::delete('products/{product}/images/{image}', [ProductImageController::class, 'destroy'])->name('products.images.destroy');
 
         Route::put('colourways/{colourway}', [ColourwayController::class, 'update'])->name('colourways.update');
 

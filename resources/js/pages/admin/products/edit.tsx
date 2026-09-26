@@ -6,6 +6,11 @@ import {
     type StockRow,
     type Supplier,
 } from '@/components/admin/stock-panel';
+import {
+    GalleryPanel,
+    type GalleryColourway,
+    type GalleryImage,
+} from '@/components/admin/gallery-panel';
 import AdminLayout from '@/layouts/admin-layout';
 
 type Product = {
@@ -53,6 +58,8 @@ export default function EditProduct({
     rows,
     batches,
     suppliers,
+    images,
+    galleryColourways,
 }: {
     product: Product;
     categories: { id: number; name: string }[];
@@ -61,6 +68,8 @@ export default function EditProduct({
     rows: StockRow[];
     batches: Batch[];
     suppliers: Supplier[];
+    images: GalleryImage[];
+    galleryColourways: GalleryColourway[];
 }) {
     return (
         <AdminLayout
@@ -276,6 +285,12 @@ export default function EditProduct({
                     </>
                 )}
             </Form>
+
+            <GalleryPanel
+                productSlug={product.slug}
+                images={images}
+                colourways={galleryColourways}
+            />
 
             <StockPanel
                 productSlug={product.slug}

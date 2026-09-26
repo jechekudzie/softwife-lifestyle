@@ -39,6 +39,12 @@ class Product extends Model
     }
 
     /** @return BelongsToMany<Colourway, $this> */
+    /** Every photograph of this product, in the order they should be shown. */
+    public function images(): HasMany
+    {
+        return $this->hasMany(ProductImage::class)->orderBy('position')->orderBy('id');
+    }
+
     public function colourways(): BelongsToMany
     {
         return $this->belongsToMany(Colourway::class)

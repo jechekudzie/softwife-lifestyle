@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Colourway;
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Models\ProductVariant;
 use App\Models\StockBatch;
 use App\Models\StockMovement;
@@ -50,7 +51,7 @@ class ProductController extends Controller
 
     public function edit(Product $product): Response
     {
-        $product->load('colourways');
+        $product->load('colourways', 'images');
 
         return Inertia::render('admin/products/edit', [
             'product' => [
@@ -73,6 +74,18 @@ class ProductController extends Controller
             ],
             'categories' => Category::orderBy('position')->get(['id', 'name']),
             'grounds' => ['wine', 'rose', 'brown', 'plum', 'pale'],
+            'images' => $product->images->map(fn (ProductImage $image) => [
+                'id' => $image->id,
+                'path' => $image->path,
+                'alt' => $image->alt,
+                'position' => $image->position,
+                'colourwayId' => $image->colourway_id,
+            ]),
+            'galleryColourways' => $product->colourways->map(fn (Colourway $colourway) => [
+                'id' => $colourway->id,
+                'name' => $colourway->name,
+                'cloth' => $colourway->cloth,
+            ])->values(),
             'sizes' => config('shop.sizes'),
             'rows' => $this->stockMatrix($product),
             'suppliers' => Supplier::active()->get(['id', 'name']),
