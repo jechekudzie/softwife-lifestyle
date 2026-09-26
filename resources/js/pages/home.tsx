@@ -29,14 +29,13 @@ import {
 /**
  * The hero.
  *
- * One photograph, still, filling the frame — the brand's own world rather than
- * a product shot, with the lockup set over the calm left of it. It replaced a
- * four-plate rotation that downloaded several photographs before anyone had
- * asked to see them; this one ships a single 34KB file.
+ * One photograph, still, filling the frame: the four prints in one courtyard,
+ * shot landscape, so nothing has to be cropped into a shape it was not taken
+ * in. It replaced a four-plate rotation that pulled several photographs down
+ * before anyone had asked to see them.
  *
- * Two crops are cut from the same frame because the shapes are not the same
- * argument: wide screens get a band across both women, phones get the upright
- * frame with the wall above their heads for the type to sit on.
+ * Phones get a narrower cut of the same frame rather than the centre sliver
+ * `cover` would otherwise leave them with.
  */
 function Hero() {
     return (
@@ -45,21 +44,26 @@ function Hero() {
                 <source
                     media="(min-width: 768px)"
                     type="image/webp"
-                    srcSet="/media/hero/pair-cafe-wide-960.webp 960w, /media/hero/pair-cafe-wide-1440.webp 1440w"
+                    srcSet="/media/hero/courtyard-wide-640.webp 640w, /media/hero/courtyard-wide-960.webp 960w, /media/hero/courtyard-wide-1280.webp 1280w, /media/hero/courtyard-wide-1698.webp 1698w"
                     sizes="100vw"
                 />
                 <source
                     type="image/webp"
-                    srcSet="/media/hero/pair-cafe-tall-480.webp 480w, /media/hero/pair-cafe-tall-720.webp 720w"
+                    srcSet="/media/hero/courtyard-tall-620.webp 620w, /media/hero/courtyard-tall-900.webp 900w"
                     sizes="100vw"
                 />
                 <img
-                    src="/media/hero/pair-cafe-wide-960.jpg"
-                    alt="Two women in Softwife tees over drinks"
-                    className="h-full w-full object-cover"
+                    src="/media/hero/courtyard-wide-1280.jpg"
+                    alt="Four women in Softwife tees in a sunlit courtyard"
+                    /*
+                     * A touch of growth from the top edge on phones, enough
+                     * to drop the faces clear of the floating nav without
+                     * closing in on anyone.
+                     */
+                    className="h-full w-full origin-top scale-[1.04] object-cover md:scale-100"
                     style={{
-                        objectPosition: '58% 34%',
-                        filter: 'saturate(1.08) contrast(1.04)',
+                        objectPosition: '50% 0%',
+                        filter: 'saturate(1.04)',
                     }}
                     fetchPriority="high"
                     decoding="sync"
@@ -447,8 +451,6 @@ export default function Home({ hero }: { hero?: 'travelling' }) {
 
                 <BestSellers />
 
-                <Categories />
-
                 <Lifestyle
                     onOpenReel={(index) => setLightbox({ reels: REELS, index })}
                     reelsPaused={lightbox !== null}
@@ -528,6 +530,8 @@ export default function Home({ hero }: { hero?: 'travelling' }) {
                         </button>
                     </form>
                 </section>
+
+                <Categories />
 
                 <StorefrontFooter />
             </div>
