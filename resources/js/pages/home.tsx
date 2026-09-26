@@ -1,6 +1,6 @@
 import { Head } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
-import { Lockup, Polaroid, Script, SMark } from '@/components/storefront/brand';
+import { Polaroid, Script, SMark } from '@/components/storefront/brand';
 import { StorefrontHeader } from '@/components/storefront/header';
 import { StorefrontFooter } from '@/components/storefront/footer';
 import { TravellingHero } from '@/components/storefront/travelling-hero';
@@ -48,7 +48,7 @@ function Hero() {
              * From `md` up the shapes agree, and the section takes the frame's
              * own proportions so `cover` has nothing left to crop.
              */}
-            <div className="relative md:absolute md:inset-0 md:-z-20">
+            <div className="relative pt-20 md:absolute md:inset-0 md:-z-20 md:pt-0">
                 <img
                     src="/media/hero/courtyard-1280.jpg"
                     srcSet="/media/hero/courtyard-540.webp 540w, /media/hero/courtyard-780.webp 780w, /media/hero/courtyard-960.webp 960w, /media/hero/courtyard-1280.webp 1280w, /media/hero/courtyard-1698.webp 1698w"
@@ -76,16 +76,7 @@ function Hero() {
                         Softwife Lifestyle — affirmation apparel for women
                     </h1>
 
-                    <Lockup
-                        color="var(--color-magenta)"
-                        align="center"
-                        className="w-full max-w-[19rem] sm:max-w-[26rem]"
-                        style={{
-                            filter: 'drop-shadow(0 6px 26px rgba(34,10,20,0.35))',
-                        }}
-                    />
-
-                    <p className="font-display text-wine md:text-butter mt-5 text-[clamp(1.1rem,2.4vw,1.6rem)] leading-[1.35] italic">
+                    <p className="font-display text-wine md:text-butter text-[clamp(1.5rem,3.6vw,2.8rem)] leading-[1.25] italic">
                         in my soft wife era
                     </p>
 

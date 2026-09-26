@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { BagDropdown } from '@/components/storefront/bag-dropdown';
-import { SMark, Wordmark } from '@/components/storefront/brand';
+import { Lockup, SMark } from '@/components/storefront/brand';
 import { useCart } from '@/lib/cart';
 import { formatPrice, LINES } from '@/lib/storefront';
 
@@ -222,11 +222,12 @@ export function StorefrontHeader({
                     >
                         <SMark
                             color="var(--color-magenta)"
-                            className="h-6 w-6"
+                            className="h-7 w-7"
                         />
-                        <Wordmark
+                        {/* LIFESTYLE sits under the mark, as it does on the cloth. */}
+                        <Lockup
                             color="currentColor"
-                            className="hidden h-3 w-24 sm:block"
+                            className="hidden w-24 sm:block"
                         />
                     </a>
 
