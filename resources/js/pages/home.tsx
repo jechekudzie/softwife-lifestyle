@@ -62,9 +62,8 @@ function Hero() {
 
             {/*
              * No veil over the frame. Every wash tried here drained the
-             * courtyard of the light it was shot in, so the type carries its
-             * own legibility instead: a glow behind the line, a fill behind
-             * each button.
+             * courtyard of the light it was shot in, so the two buttons
+             * carry their own fills instead.
              */}
 
             <div className="relative flex w-full flex-col items-center px-6 pt-5 pb-7 text-center sm:px-12 md:h-full md:justify-end md:pt-32 md:pb-8">
@@ -73,17 +72,7 @@ function Hero() {
                         Softwife Lifestyle — affirmation apparel for women
                     </h1>
 
-                    <p
-                        className="font-display text-wine text-[clamp(1.45rem,6vw,2.8rem)] leading-[1.2] italic"
-                        style={{
-                            textShadow:
-                                '0 1px 22px rgba(255,251,247,0.95), 0 1px 4px rgba(255,251,247,0.9)',
-                        }}
-                    >
-                        in my soft era
-                    </p>
-
-                    <div className="mt-5 flex w-full flex-wrap items-center justify-center gap-3 md:mt-9">
+                    <div className="flex w-full flex-wrap items-center justify-center gap-3">
                         <a
                             href="/shop"
                             className="bg-magenta hover:bg-magenta-deep flex-1 rounded-full px-6 py-3.5 text-center text-sm font-semibold whitespace-nowrap text-white transition duration-300 hover:-translate-y-0.5 focus-visible:ring-4 focus-visible:ring-white/60 focus-visible:outline-none sm:flex-none sm:px-9 sm:py-4"
