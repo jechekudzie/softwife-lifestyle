@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Models\Order;
 use App\Models\ProductVariant;
+use App\Support\Catalogue;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -47,6 +48,13 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
             ],
+            /**
+             * The catalogue the header searches. Shared rather than passed per
+             * page because search is in the navigation on every one of them.
+             */
+            'catalogue' => fn () => $request->routeIs('admin.*')
+                ? null
+                : Catalogue::lines(),
             /** Only computed for the admin area, and only when signed in as one. */
             'adminAlerts' => fn () => $request->user()?->is_admin
                 ? [

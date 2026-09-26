@@ -15,14 +15,14 @@ import {
 } from '@/components/storefront/reel-tile';
 import {
     AFFIRMATIONS,
-    CATEGORIES,
-    LINES,
     MANIFESTO,
     MANIFESTO_REEL,
     REELS,
     REVIEWS,
     RIBBON,
     RITUAL,
+    type AffirmationLine,
+    type Category,
     type Reel,
 } from '@/lib/storefront';
 
@@ -126,7 +126,7 @@ function Ribbon() {
     );
 }
 
-function BestSellers() {
+function BestSellers({ lines }: { lines: AffirmationLine[] }) {
     return (
         <section id="shop" className="bg-bone">
             <div className="mx-auto max-w-6xl px-6 pt-9 pb-20 sm:pt-14 sm:pb-32">
@@ -137,7 +137,7 @@ function BestSellers() {
                 </div>
 
                 <ul className="mt-7 grid gap-6 sm:mt-14 sm:grid-cols-2 lg:grid-cols-4 lg:gap-7">
-                    {LINES.map((line, index) => (
+                    {lines.map((line, index) => (
                         <li
                             key={line.slug}
                             className="sw-reveal"
@@ -162,7 +162,7 @@ function BestSellers() {
 }
 
 /** The product-type axis. Tees ship today; the rest are in production. */
-function Categories() {
+function Categories({ categories }: { categories: Category[] }) {
     return (
         <section className="bg-bone px-6 py-24 sm:py-28">
             <div className="mx-auto max-w-6xl">
@@ -176,7 +176,7 @@ function Categories() {
                  * illustrated clip-art beside real photography reads cheap.
                  */}
                 <ul className="mt-14 grid gap-x-10 gap-y-10 sm:grid-cols-3">
-                    {CATEGORIES.map((category) => (
+                    {categories.map((category) => (
                         <li
                             key={category.name}
                             className="sw-reveal border-wine/15 border-t pt-6"
@@ -387,7 +387,15 @@ function Reviews() {
     );
 }
 
-export default function Home({ hero }: { hero?: 'travelling' }) {
+export default function Home({
+    hero,
+    lines,
+    categories,
+}: {
+    hero?: 'travelling' | null;
+    lines: AffirmationLine[];
+    categories: Category[];
+}) {
     const [landed, setLanded] = useState(false);
     const [lightbox, setLightbox] = useState<{
         reels: Reel[];
@@ -418,11 +426,15 @@ export default function Home({ hero }: { hero?: 'travelling' }) {
             <div className="bg-petal text-choc font-sans">
                 <StorefrontHeader shadow={landed} />
 
-                {hero === 'travelling' ? <TravellingHero /> : <Hero />}
+                {hero === 'travelling' ? (
+                    <TravellingHero lines={lines} />
+                ) : (
+                    <Hero />
+                )}
 
                 {SHOW_RIBBON ? <Ribbon /> : null}
 
-                <BestSellers />
+                <BestSellers lines={lines} />
 
                 <Lifestyle
                     onOpenReel={(index) => setLightbox({ reels: REELS, index })}
@@ -504,7 +516,7 @@ export default function Home({ hero }: { hero?: 'travelling' }) {
                     </form>
                 </section>
 
-                <Categories />
+                <Categories categories={categories} />
 
                 <StorefrontFooter />
             </div>

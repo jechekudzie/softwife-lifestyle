@@ -16,6 +16,14 @@ export type Colourway = {
     ink: string;
 };
 
+/** One photograph of a line, and the cloth it pictures where it shows one. */
+export type LineImage = {
+    src: string;
+    /** Matches a colourway name; absent means it belongs to the whole line. */
+    colourway?: string;
+    alt?: string;
+};
+
 export type AffirmationLine = {
     slug: string;
     name: string;
@@ -29,6 +37,8 @@ export type AffirmationLine = {
     ground: 'wine' | 'rose' | 'brown' | 'plum' | 'pale';
     /** Product shot for the catalogue card, or null when none exists yet. */
     photo: string | null;
+    /** Every frame of this line, in the order they should slide. */
+    images: LineImage[];
     /** The colourway the photo actually pictures. */
     pictured: string;
     field: string;
@@ -61,99 +71,6 @@ export const BLUSH = 'var(--color-blush)';
 export const WINE = 'var(--color-wine)';
 export const PLUM = 'var(--color-plum)';
 
-const BASE_COLOURWAYS: Colourway[] = [
-    { name: 'Butter', cloth: BUTTER, ink: CHOC },
-    { name: 'Chocolate', cloth: CHOC, ink: BUTTER },
-    { name: 'Bone', cloth: BONE, ink: MAGENTA },
-    { name: 'Blush', cloth: BLUSH, ink: CHOC },
-    { name: 'Burgundy', cloth: WINE, ink: BUTTER },
-    { name: 'Plum', cloth: PLUM, ink: '#ffffff' },
-];
-
-export const LINES: AffirmationLine[] = [
-    {
-        slug: 'soft-wife',
-        name: 'Soft Wife',
-        era: 'Wife',
-        phrase: 'in my soft wife era',
-        affirmation:
-            'In my soft wife era means I don’t chase. I attract. Demure in my presence, mindful in my heart and unbothered, because God already wrote the best plot twist.',
-        hero: '/media/soft-wife-choc-lights.jpg',
-        ground: 'brown',
-        photo: '/media/soft-wife-butter-studio.jpg',
-        pictured: 'Butter · burgundy print',
-        field: 'var(--color-bone)',
-        colourways: BASE_COLOURWAYS,
-        price: 35,
-        wasPrice: null,
-        badge: 'Best seller',
-    },
-    {
-        slug: 'soft-mom',
-        name: 'Soft Mom',
-        era: 'Mom',
-        phrase: 'in my soft mom era',
-        affirmation:
-            'In my soft mom era because God looked at me and thought me worthy enough to become a mother, to care for His most beautiful creations, to experience the purest form of love.',
-        hero: '/media/soft-mom-white-coat.jpg',
-        ground: 'wine',
-        photo: '/media/soft-mom-white-seated.jpg',
-        pictured: 'Bone · burgundy print',
-        field: 'var(--color-petal-deep)',
-        colourways: [
-            BASE_COLOURWAYS[1],
-            BASE_COLOURWAYS[4],
-            BASE_COLOURWAYS[0],
-            BASE_COLOURWAYS[2],
-        ],
-        price: 35,
-        wasPrice: null,
-        badge: null,
-    },
-    {
-        slug: 'soft-babe',
-        name: 'Soft Babe',
-        era: 'Babe',
-        phrase: 'in my soft babe era',
-        affirmation:
-            'I am in my soft babe era because I know my worth, I invest in myself mentally, spiritually and financially, and I keep it cute without competing.',
-        hero: '/media/soft-babe-plum-seated.jpg',
-        ground: 'plum',
-        photo: '/media/soft-babe-butter-studio.jpg',
-        pictured: 'Butter · burgundy print',
-        field: 'var(--color-petal)',
-        colourways: [
-            BASE_COLOURWAYS[2],
-            BASE_COLOURWAYS[0],
-            BASE_COLOURWAYS[3],
-        ],
-        price: 35,
-        wasPrice: null,
-        badge: 'New',
-    },
-    {
-        slug: 'becoming-softwife',
-        name: 'Becoming Softwife',
-        era: 'Her',
-        phrase: 'becoming her, softly',
-        affirmation:
-            'I am becoming her. Softer in my seasons, steadier in my faith, and no longer shrinking to make anyone else comfortable.',
-        hero: '/media/soft-wife-white-tashas.jpg',
-        ground: 'pale',
-        photo: '/media/soft-babe-plum-table.jpg',
-        pictured: 'Plum · white print',
-        field: 'var(--color-butter)',
-        colourways: [
-            BASE_COLOURWAYS[4],
-            BASE_COLOURWAYS[1],
-            BASE_COLOURWAYS[2],
-        ],
-        price: 40,
-        wasPrice: 48,
-        badge: null,
-    },
-];
-
 /**
  * The order the hero travels, opening on the burgundy plate. The catalogue
  * keeps its own order, where Soft Wife leads.
@@ -165,30 +82,14 @@ export const HERO_ORDER = [
     'becoming-softwife',
 ];
 
-export const HERO_LINES: AffirmationLine[] = HERO_ORDER.map(
-    (slug) => LINES.find((line) => line.slug === slug) as AffirmationLine,
-);
+/** The hero's own order, applied to whatever the catalogue actually holds. */
+export function heroLines(lines: AffirmationLine[]): AffirmationLine[] {
+    const ordered = HERO_ORDER.map((slug) =>
+        lines.find((line) => line.slug === slug),
+    ).filter((line): line is AffirmationLine => Boolean(line));
 
-export const CATEGORIES: Category[] = [
-    {
-        name: 'Tees',
-        blurb: 'The original affirmation tee, in four colourways.',
-        silhouette: 'tee',
-        available: true,
-    },
-    {
-        name: 'Tracksuits',
-        blurb: 'Heavyweight sets for slow mornings and long seasons.',
-        silhouette: 'hoodie',
-        available: false,
-    },
-    {
-        name: 'Caps',
-        blurb: 'Embroidered, structured, quietly said.',
-        silhouette: 'cap',
-        available: false,
-    },
-];
+    return ordered.length ? ordered : lines;
+}
 
 export const AFFIRMATIONS = [
     'and if anything, i want to keep my softness without becoming everyone’s favourite person to take advantage of.',

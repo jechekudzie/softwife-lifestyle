@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\OrderController as AdminOrders;
 use App\Http\Controllers\Admin\ProductController as AdminProducts;
 use App\Http\Controllers\Admin\ProductImageController;
 use App\Http\Controllers\Admin\SupplierController;
+use App\Http\Controllers\StorefrontController;
 use App\Http\Controllers\Web\CheckoutController;
 use App\Http\Controllers\Web\OrderController;
 use Illuminate\Http\Request;
@@ -15,11 +16,11 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 /** The homepage: one still photograph behind the lockup. */
-Route::inertia('/', 'home')->name('home');
+Route::get('/', [StorefrontController::class, 'home'])->name('home');
 
 /** The same page with the older hero, where each line brings its own ground. */
-Route::inertia('dark', 'home', ['hero' => 'travelling'])->name('home.dark');
-Route::inertia('shop', 'shop/index')->name('shop');
+Route::get('dark', fn () => app(StorefrontController::class)->home('travelling'))->name('home.dark');
+Route::get('shop', [StorefrontController::class, 'shop'])->name('shop');
 Route::inertia('cart', 'cart')->name('cart');
 Route::get('checkout', [CheckoutController::class, 'index'])->name('checkout');
 Route::post('checkout', [CheckoutController::class, 'store'])->name('checkout.store');

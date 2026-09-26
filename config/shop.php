@@ -15,4 +15,16 @@ return [
 
     /** Sizes offered across the catalogue. */
     'sizes' => ['XS', 'S', 'M', 'L', 'XL', '2XL'],
+
+    /**
+     * The account that owns the shop. Set these in the environment; the
+     * defaults exist so a fresh clone can sign in locally, never so a
+     * deployment can skip setting them.
+     */
+    'admin' => [
+        'name' => env('SHOP_ADMIN_NAME', 'Softwife'),
+        'email' => env('SHOP_ADMIN_EMAIL', 'admin@softwife.test'),
+        'password' => env('SHOP_ADMIN_PASSWORD', 'password'),
+    ],
+
 ];

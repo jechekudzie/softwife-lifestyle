@@ -8,7 +8,7 @@
 import { useEffect, useState } from 'react';
 import { Lockup, SMark } from '@/components/storefront/brand';
 import { Photo } from '@/components/storefront/photo';
-import { HERO_LINES, LINES } from '@/lib/storefront';
+import { heroLines, type AffirmationLine } from '@/lib/storefront';
 
 function usePrefersReducedMotion() {
     const [reduced, setReduced] = useState(false);
@@ -136,7 +136,16 @@ const HERO_GROUNDS: Record<HeroVariant, Ground> = {
 const INK_TRANSITION =
     'color 900ms ease, background-color 900ms ease, border-color 900ms ease';
 
-export function TravellingHero({ variant }: { variant?: HeroVariant }) {
+export function TravellingHero({
+    variant,
+    lines,
+}: {
+    variant?: HeroVariant;
+    lines: AffirmationLine[];
+}) {
+    const HERO_LINES = heroLines(lines);
+    const LINES = lines;
+
     const [active, setActive] = useState(0);
     const [paused, setPaused] = useState(false);
     const reduced = usePrefersReducedMotion();

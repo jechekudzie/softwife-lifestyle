@@ -8,7 +8,7 @@ import {
     ProductCard,
     useRevealOnEnter,
 } from '@/components/storefront/product-card';
-import { CATEGORIES, LINES, SIZES } from '@/lib/storefront';
+import { SIZES, type AffirmationLine, type Category } from '@/lib/storefront';
 
 type Sort = 'featured' | 'price-low' | 'price-high' | 'newest';
 
@@ -20,10 +20,10 @@ const SORTS: { value: Sort; label: string }[] = [
 ];
 
 /** Every colourway offered across the collection, de-duplicated. */
-function allColourways() {
+function allColourways(lines: AffirmationLine[]) {
     const seen = new Map<string, { name: string; cloth: string }>();
 
-    LINES.forEach((line) =>
+    lines.forEach((line) =>
         line.colourways.forEach((colourway) => {
             if (!seen.has(colourway.name)) {
                 seen.set(colourway.name, {
@@ -54,7 +54,13 @@ function FilterGroup({
     );
 }
 
-export default function ShopIndex() {
+export default function ShopIndex({
+    lines,
+    categories,
+}: {
+    lines: AffirmationLine[];
+    categories: Category[];
+}) {
     const [colourway, setColourway] = useState<string | null>(null);
     const [size, setSize] = useState<string | null>(null);
     const [sort, setSort] = useState<Sort>('featured');
@@ -62,10 +68,10 @@ export default function ShopIndex() {
 
     useRevealOnEnter();
 
-    const colourways = useMemo(allColourways, []);
+    const colourways = useMemo(() => allColourways(lines), [lines]);
 
     const results = useMemo(() => {
-        const matched = LINES.filter((line) =>
+        const matched = lines.filter((line) =>
             colourway
                 ? line.colourways.some((option) => option.name === colourway)
                 : true,
@@ -84,7 +90,7 @@ export default function ShopIndex() {
         }
 
         return sorted;
-    }, [colourway, sort]);
+    }, [colourway, lines, sort]);
 
     const filtered = colourway !== null || size !== null;
 
@@ -97,7 +103,7 @@ export default function ShopIndex() {
         <>
             <FilterGroup heading="Category">
                 <ul className="space-y-3 text-sm">
-                    {CATEGORIES.map((category) => (
+                    {categories.map((category) => (
                         <li
                             key={category.name}
                             className="flex items-center justify-between gap-4"
@@ -110,7 +116,7 @@ export default function ShopIndex() {
                                 {category.name}
                             </span>
                             <span className="text-[0.62rem] tracking-[0.2em] uppercase opacity-40">
-                                {category.available ? LINES.length : 'Soon'}
+                                {category.available ? lines.length : 'Soon'}
                             </span>
                         </li>
                     ))}
@@ -254,7 +260,7 @@ export default function ShopIndex() {
                         <div>
                             <div className="border-wine/12 flex flex-wrap items-center justify-between gap-4 border-b pb-5">
                                 <p className="text-sm opacity-60">
-                                    Showing {results.length} of {LINES.length}{' '}
+                                    Showing {results.length} of {lines.length}{' '}
                                     pieces
                                 </p>
 
@@ -324,24 +330,26 @@ export default function ShopIndex() {
                             {/* What is still in production. */}
                             <div className="border-wine/12 mt-16 border-t pt-10">
                                 <ul className="grid gap-4 sm:grid-cols-2">
-                                    {CATEGORIES.filter(
-                                        (category) => !category.available,
-                                    ).map((category) => (
-                                        <li
-                                            key={category.name}
-                                            className="bg-petal rounded-[1.25rem] px-7 py-8"
-                                        >
-                                            <p className="text-[0.6rem] font-semibold tracking-[0.28em] uppercase opacity-45">
-                                                In production
-                                            </p>
-                                            <h3 className="font-display mt-2 text-xl font-bold">
-                                                {category.name}
-                                            </h3>
-                                            <p className="mt-2 max-w-[26em] text-sm leading-relaxed opacity-65">
-                                                {category.blurb}
-                                            </p>
-                                        </li>
-                                    ))}
+                                    {categories
+                                        .filter(
+                                            (category) => !category.available,
+                                        )
+                                        .map((category) => (
+                                            <li
+                                                key={category.name}
+                                                className="bg-petal rounded-[1.25rem] px-7 py-8"
+                                            >
+                                                <p className="text-[0.6rem] font-semibold tracking-[0.28em] uppercase opacity-45">
+                                                    In production
+                                                </p>
+                                                <h3 className="font-display mt-2 text-xl font-bold">
+                                                    {category.name}
+                                                </h3>
+                                                <p className="mt-2 max-w-[26em] text-sm leading-relaxed opacity-65">
+                                                    {category.blurb}
+                                                </p>
+                                            </li>
+                                        ))}
                                 </ul>
                             </div>
                         </div>

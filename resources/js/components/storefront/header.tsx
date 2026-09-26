@@ -7,10 +7,11 @@ import {
     X,
 } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { usePage } from '@inertiajs/react';
 import { BagDropdown } from '@/components/storefront/bag-dropdown';
 import { Lockup, SMark } from '@/components/storefront/brand';
 import { useCart } from '@/lib/cart';
-import { formatPrice, LINES } from '@/lib/storefront';
+import { formatPrice, type AffirmationLine } from '@/lib/storefront';
 
 /**
  * The storefront header.
@@ -35,14 +36,14 @@ const NAV = [
 ];
 
 /** Searches the catalogue by line name, printed words and colourway. */
-function searchCatalogue(query: string) {
+function searchCatalogue(lines: AffirmationLine[], query: string) {
     const term = query.trim().toLowerCase();
 
     if (term.length < 2) {
         return [];
     }
 
-    return LINES.filter((line) =>
+    return lines.filter((line) =>
         [
             line.name,
             line.era,
@@ -55,10 +56,19 @@ function searchCatalogue(query: string) {
     );
 }
 
-function SearchOverlay({ onClose }: { onClose: () => void }) {
+function SearchOverlay({
+    lines,
+    onClose,
+}: {
+    lines: AffirmationLine[];
+    onClose: () => void;
+}) {
     const [query, setQuery] = useState('');
     const input = useRef<HTMLInputElement>(null);
-    const results = useMemo(() => searchCatalogue(query), [query]);
+    const results = useMemo(
+        () => searchCatalogue(lines, query),
+        [lines, query],
+    );
 
     useEffect(() => {
         input.current?.focus();
@@ -169,7 +179,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
                             The lines
                         </p>
                         <ul className="mt-4 flex flex-wrap gap-2">
-                            {LINES.map((line) => (
+                            {lines.map((line) => (
                                 <li key={line.slug}>
                                     <button
                                         type="button"
@@ -198,6 +208,9 @@ export function StorefrontHeader({
     const [searchOpen, setSearchOpen] = useState(false);
     const [bagOpen, setBagOpen] = useState(false);
     const { count } = useCart();
+
+    /** Shared by the server on every storefront page, since search lives here. */
+    const catalogue = (usePage().props.catalogue ?? []) as AffirmationLine[];
 
     return (
         <>
@@ -286,7 +299,10 @@ export function StorefrontHeader({
             </header>
 
             {searchOpen ? (
-                <SearchOverlay onClose={() => setSearchOpen(false)} />
+                <SearchOverlay
+                    lines={catalogue}
+                    onClose={() => setSearchOpen(false)}
+                />
             ) : null}
         </>
     );

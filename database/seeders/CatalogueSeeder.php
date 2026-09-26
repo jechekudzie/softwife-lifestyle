@@ -7,6 +7,7 @@ use App\Models\CollectionPoint;
 use App\Models\Colourway;
 use App\Models\DeliveryZone;
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Models\ProductVariant;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -96,9 +97,17 @@ class CatalogueSeeder extends Seeder
                 'hero_image' => '/media/soft-wife-choc-lights.jpg',
                 'hero_ground' => 'brown',
                 'card_image' => '/media/soft-wife-butter-studio.jpg',
-                'pictured_label' => 'Chocolate · butter print',
+                'pictured_label' => 'Butter · burgundy print',
                 'field_colour' => 'var(--color-bone)',
                 'colourways' => ['Butter', 'Chocolate', 'Bone', 'Blush', 'Burgundy', 'Plum'],
+                'gallery' => [
+                    ['/media/soft-wife-butter-studio.jpg', 'Butter', null],
+                    ['/media/g-wagon-butter-back.jpg', 'Butter', 'The G-Wagon print across the back'],
+                    ['/media/soft-wife-choc-affirmation.jpg', 'Chocolate', null],
+                    ['/media/soft-wife-choc-lights.jpg', 'Chocolate', null],
+                    ['/media/soft-wife-white-street.jpg', 'Bone', null],
+                    ['/media/soft-wife-white-tashas.jpg', 'Bone', null],
+                ],
             ],
             [
                 'name' => 'Soft Mom',
@@ -114,6 +123,10 @@ class CatalogueSeeder extends Seeder
                 'pictured_label' => 'Bone · burgundy print',
                 'field_colour' => 'var(--color-petal-deep)',
                 'colourways' => ['Chocolate', 'Burgundy', 'Butter', 'Bone'],
+                'gallery' => [
+                    ['/media/soft-mom-white-seated.jpg', 'Bone', null],
+                    ['/media/soft-mom-white-coat.jpg', 'Bone', null],
+                ],
             ],
             [
                 'name' => 'Soft Babe',
@@ -126,9 +139,15 @@ class CatalogueSeeder extends Seeder
                 'hero_image' => '/media/soft-babe-plum-seated.jpg',
                 'hero_ground' => 'plum',
                 'card_image' => '/media/soft-babe-butter-studio.jpg',
-                'pictured_label' => 'Plum · white print',
+                'pictured_label' => 'Butter · burgundy print',
                 'field_colour' => 'var(--color-petal)',
                 'colourways' => ['Bone', 'Butter', 'Blush'],
+                'gallery' => [
+                    ['/media/soft-babe-butter-studio.jpg', 'Butter', null],
+                    ['/media/soft-babe-blue-standing.jpg', null, null],
+                    ['/media/soft-babe-plum-standing.jpg', null, null],
+                    ['/media/soft-babe-plum-seated.jpg', null, null],
+                ],
             ],
             [
                 'name' => 'Becoming Softwife',
@@ -144,12 +163,17 @@ class CatalogueSeeder extends Seeder
                 'pictured_label' => 'Plum · white print',
                 'field_colour' => 'var(--color-butter)',
                 'colourways' => ['Burgundy', 'Chocolate', 'Bone'],
+                'gallery' => [
+                    ['/media/soft-babe-plum-table.jpg', null, null],
+                    ['/media/soft-wife-white-tashas.jpg', null, null],
+                ],
             ],
         ];
 
         foreach ($rows as $position => $row) {
             $names = $row['colourways'];
-            unset($row['colourways']);
+            $gallery = $row['gallery'] ?? [];
+            unset($row['colourways'], $row['gallery']);
 
             $product = Product::updateOrCreate(
                 ['slug' => Str::slug($row['name'])],
@@ -163,6 +187,22 @@ class CatalogueSeeder extends Seeder
                     ])
                     ->all(),
             );
+
+            /**
+             * The shoot, tagged with the cloth each frame pictures. Keyed on
+             * the path so re-seeding re-tags rather than duplicating, and so
+             * anything the admin has uploaded since is left alone.
+             */
+            foreach ($gallery as $index => [$path, $colourway, $alt]) {
+                ProductImage::updateOrCreate(
+                    ['product_id' => $product->id, 'path' => $path],
+                    [
+                        'colourway_id' => $colourway ? $colourways[$colourway]->id : null,
+                        'alt' => $alt,
+                        'position' => $index,
+                    ],
+                );
+            }
 
             foreach ($names as $name) {
                 foreach (self::SIZES as $size) {

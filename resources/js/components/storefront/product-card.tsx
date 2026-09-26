@@ -2,7 +2,7 @@ import { Heart, ShoppingBag } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { AddToBag } from '@/components/storefront/add-to-bag';
 import { Garment, Print } from '@/components/storefront/brand';
-import { Photo } from '@/components/storefront/photo';
+import { ProductGallery } from '@/components/storefront/product-gallery';
 import { formatPrice, type AffirmationLine } from '@/lib/storefront';
 
 /** Adds `sw-in` to every `.sw-reveal` element as it enters the viewport. */
@@ -54,12 +54,13 @@ export function ProductCard({ line }: { line: AffirmationLine }) {
     return (
         <article className="group flex h-full flex-col">
             <div className="relative overflow-hidden rounded-[1.25rem] bg-white shadow-[0_26px_50px_-30px_rgba(39,24,20,0.5)]">
-                {line.photo ? (
-                    <Photo
-                        src={line.photo}
+                {line.images.length ? (
+                    <ProductGallery
+                        images={line.images}
+                        colourway={active.name}
                         alt={`${line.name} affirmation tee`}
                         sizes="(min-width: 1280px) 22vw, (min-width: 640px) 45vw, 90vw"
-                        className="aspect-[4/5] w-full object-cover transition-transform duration-[900ms] ease-out group-hover:scale-[1.05]"
+                        className="aspect-[4/5] w-full object-cover"
                     />
                 ) : (
                     <div
@@ -90,7 +91,9 @@ export function ProductCard({ line }: { line: AffirmationLine }) {
                 <div
                     className="absolute inset-x-0 top-0 flex items-start justify-between p-5"
                     style={{
-                        color: line.photo ? '#ffffff' : 'var(--color-choc)',
+                        color: line.images.length
+                            ? '#ffffff'
+                            : 'var(--color-choc)',
                     }}
                 >
                     <span className="text-[0.58rem] font-medium tracking-[0.24em] uppercase">
@@ -147,7 +150,7 @@ export function ProductCard({ line }: { line: AffirmationLine }) {
                 </div>
 
                 <p className="mt-1 text-xs tracking-wide opacity-50">
-                    {line.photo
+                    {line.images.length
                         ? line.pictured
                         : `${active.name} · affirmation print`}
                 </p>

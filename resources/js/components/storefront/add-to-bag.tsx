@@ -2,6 +2,7 @@ import { Check, PenLine, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Garment, Print } from '@/components/storefront/brand';
+import { ProductGallery } from '@/components/storefront/product-gallery';
 import { CUSTOM_AFFIRMATION_FEE, CUSTOM_LEAD_TIME, useCart } from '@/lib/cart';
 import { formatPrice, SIZES, type AffirmationLine } from '@/lib/storefront';
 
@@ -114,10 +115,13 @@ export function AddToBag({
                         className="w-28 shrink-0 overflow-hidden rounded-2xl"
                         style={{ backgroundColor: line.field }}
                     >
-                        {line.photo ? (
-                            <img
-                                src={line.photo}
-                                alt=""
+                        {line.images.length ? (
+                            <ProductGallery
+                                images={line.images}
+                                colourway={active.name}
+                                alt={`${line.name} in ${active.name}`}
+                                sizes="7rem"
+                                interval={2600}
                                 className="aspect-[4/5] w-full object-cover"
                             />
                         ) : (

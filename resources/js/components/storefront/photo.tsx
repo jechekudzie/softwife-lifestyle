@@ -23,6 +23,7 @@ export function Photo({
     sizes = '100vw',
     widths = WIDTHS,
     priority = false,
+    style,
 }: {
     src: string;
     alt: string;
@@ -30,6 +31,7 @@ export function Photo({
     sizes?: string;
     widths?: number[];
     priority?: boolean;
+    style?: React.CSSProperties;
 }) {
     const base = stem(src);
     const set = (extension: string) =>
@@ -46,6 +48,7 @@ export function Photo({
                 sizes={sizes}
                 alt={alt}
                 className={className}
+                style={style}
                 loading={priority ? 'eager' : 'lazy'}
                 decoding={priority ? 'sync' : 'async'}
                 fetchPriority={priority ? 'high' : 'auto'}
