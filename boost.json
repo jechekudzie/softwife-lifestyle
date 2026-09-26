@@ -1,8 +1,5 @@
 {
-    "agents": [
-        "claude_code",
-        "cursor"
-    ],
+    "agents": ["claude_code", "cursor"],
     "cloud": false,
     "guidelines": true,
     "mcp": true,
