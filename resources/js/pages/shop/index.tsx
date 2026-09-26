@@ -193,40 +193,40 @@ export default function ShopIndex({
             <div className="bg-bone text-choc font-sans">
                 <StorefrontHeader current="shop" />
 
-                {/* Editorial masthead. */}
+                {/* Editorial masthead, on the rose ground the shop lands on. */}
                 <section
-                    className="sw-grain relative overflow-hidden pt-32 pb-20 sm:pt-40 sm:pb-24"
+                    className="relative overflow-hidden pt-32 pb-20 sm:pt-40 sm:pb-24"
                     style={{
                         background:
-                            'radial-gradient(120% 120% at 10% 0%, #7d2a44 0%, #6b2137 40%, #55172c 76%, #3d0f20 100%)',
+                            'radial-gradient(120% 118% at 6% 0%, #fffaf3 0%, #fdf0f5 34%, #f8dde9 72%, #f2cfdf 100%)',
                     }}
                 >
                     <SMark
-                        color="var(--color-butter)"
+                        color="var(--color-wine)"
                         className="pointer-events-none absolute -right-[6%] -bottom-[38%] hidden h-[150%] lg:block"
-                        style={{ opacity: 0.06 }}
+                        style={{ opacity: 0.05 }}
                     />
 
                     <div className="relative mx-auto max-w-6xl px-6">
                         <nav
                             aria-label="Breadcrumb"
-                            className="text-butter/55 text-[0.68rem] tracking-[0.22em] uppercase"
+                            className="text-wine/55 text-[0.68rem] tracking-[0.22em] uppercase"
                         >
-                            <a href="/" className="hover:text-butter">
+                            <a href="/" className="hover:text-wine">
                                 Home
                             </a>
                             <span className="px-2">/</span>
-                            <span className="text-butter/85">Shop</span>
+                            <span className="text-wine/85">Shop</span>
                         </nav>
 
-                        <h1 className="font-display text-butter mt-7 text-[clamp(2.4rem,6vw,4.5rem)] leading-[1.02]">
+                        <h1 className="font-display text-wine mt-7 text-[clamp(2.4rem,6vw,4.5rem)] leading-[1.02]">
                             Wear your{' '}
-                            <Script className="text-[1.35em] text-[var(--color-rose)]">
+                            <Script className="text-magenta text-[1.35em]">
                                 words
                             </Script>
                         </h1>
 
-                        <p className="text-butter/70 mt-6 max-w-[36em] text-sm leading-[1.9]">
+                        <p className="text-choc/65 mt-6 max-w-[36em] text-sm leading-[1.9]">
                             Every piece carries an affirmation for the season
                             you are in. Heavyweight cotton, printed in small
                             runs, made to be lived in rather than saved.

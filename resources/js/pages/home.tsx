@@ -77,7 +77,7 @@ function Hero() {
                     </h1>
 
                     <p className="font-display text-wine md:text-butter text-[clamp(1.45rem,6vw,2.8rem)] leading-[1.2] italic">
-                        in my soft wife era
+                        in my soft era
                     </p>
 
                     <div className="mt-5 flex w-full flex-wrap items-center justify-center gap-3 md:mt-9">
