@@ -40,6 +40,7 @@ class CatalogueSeeder extends Seeder
             ['Blush', '#ea7fb0', '#271814'],
             ['Burgundy', '#6b2137', '#f2e7b7'],
             ['Plum', '#5a2450', '#ffffff'],
+            ['Sky', '#a9cfef', '#ffffff'],
         ];
 
         $made = [];
@@ -99,7 +100,7 @@ class CatalogueSeeder extends Seeder
                 'card_image' => '/media/soft-wife-butter-studio.jpg',
                 'pictured_label' => 'Butter · burgundy print',
                 'field_colour' => 'var(--color-bone)',
-                'colourways' => ['Butter', 'Chocolate', 'Bone', 'Blush', 'Burgundy', 'Plum'],
+                'colourways' => ['Butter', 'Chocolate', 'Bone', 'Blush', 'Burgundy', 'Plum', 'Sky'],
                 'gallery' => [
                     ['/media/soft-wife-butter-studio.jpg', 'Butter', null],
                     ['/media/g-wagon-butter-back.jpg', 'Butter', 'The G-Wagon print across the back'],
@@ -107,6 +108,7 @@ class CatalogueSeeder extends Seeder
                     ['/media/soft-wife-choc-lights.jpg', 'Chocolate', null],
                     ['/media/soft-wife-white-street.jpg', 'Bone', null],
                     ['/media/soft-wife-white-tashas.jpg', 'Bone', null],
+                    ['/media/soft-wife-blue-standing.jpg', 'Sky', null],
                 ],
             ],
             [
@@ -141,10 +143,10 @@ class CatalogueSeeder extends Seeder
                 'card_image' => '/media/soft-babe-butter-studio.jpg',
                 'pictured_label' => 'Butter · burgundy print',
                 'field_colour' => 'var(--color-petal)',
-                'colourways' => ['Bone', 'Butter', 'Blush'],
+                'colourways' => ['Bone', 'Butter', 'Blush', 'Sky'],
                 'gallery' => [
                     ['/media/soft-babe-butter-studio.jpg', 'Butter', null],
-                    ['/media/soft-babe-blue-standing.jpg', null, null],
+                    ['/media/soft-babe-blue-standing.jpg', 'Sky', null],
                     ['/media/soft-babe-plum-standing.jpg', null, null],
                     ['/media/soft-babe-plum-seated.jpg', null, null],
                 ],

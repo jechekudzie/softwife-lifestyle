@@ -51,6 +51,15 @@ export function ProductCard({ line }: { line: AffirmationLine }) {
     const [adding, setAdding] = useState(false);
     const active = line.colourways[colourway];
 
+    /**
+     * Whether the chosen swatch has photographs of its own. When it does the
+     * caption names it; when it does not the gallery is falling back to the
+     * whole line, so the caption keeps describing what is actually pictured.
+     */
+    const pictured = line.images.some(
+        (image) => image.colourway === active.name,
+    );
+
     return (
         <article className="group flex h-full flex-col">
             <div className="relative overflow-hidden rounded-[1.25rem] bg-white shadow-[0_26px_50px_-30px_rgba(39,24,20,0.5)]">
@@ -150,9 +159,11 @@ export function ProductCard({ line }: { line: AffirmationLine }) {
                 </div>
 
                 <p className="mt-1 text-xs tracking-wide opacity-50">
-                    {line.images.length
-                        ? line.pictured
-                        : `${active.name} · affirmation print`}
+                    {pictured
+                        ? active.name
+                        : line.images.length
+                          ? line.pictured
+                          : `${active.name} · affirmation print`}
                 </p>
 
                 <ul className="mt-3.5 flex items-center gap-2">
