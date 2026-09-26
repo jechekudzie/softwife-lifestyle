@@ -39,7 +39,7 @@ import {
  */
 function Hero() {
     return (
-        <section className="bg-petal relative isolate overflow-hidden md:flex md:h-[min(64.5vw,94svh)] md:items-end">
+        <section className="bg-petal relative isolate overflow-hidden md:flex md:h-[min(64.5vw,84svh)] md:items-end">
             {/*
              * On a phone the banner is landscape and the screen is not, so it
              * sits whole across the top and the type takes the rose ground
@@ -54,7 +54,7 @@ function Hero() {
                     srcSet="/media/hero/courtyard-540.webp 540w, /media/hero/courtyard-780.webp 780w, /media/hero/courtyard-960.webp 960w, /media/hero/courtyard-1280.webp 1280w, /media/hero/courtyard-1698.webp 1698w"
                     sizes="100vw"
                     alt="Four women in Softwife tees in a sunlit courtyard"
-                    className="w-full object-cover md:h-full"
+                    className="w-full object-cover md:h-full md:object-top"
                     fetchPriority="high"
                     decoding="sync"
                 />
@@ -70,7 +70,7 @@ function Hero() {
                 }}
             />
 
-            <div className="relative flex w-full flex-col items-center px-6 pt-10 pb-14 text-center sm:px-12 md:h-full md:justify-end md:pt-32 md:pb-8">
+            <div className="relative flex w-full flex-col items-center px-6 pt-8 pb-10 text-center sm:px-12 md:h-full md:justify-end md:pt-32 md:pb-8">
                 <div className="sw-rise flex flex-col items-center">
                     <h1 className="sr-only">
                         Softwife Lifestyle — affirmation apparel for women
@@ -129,7 +129,7 @@ function Ribbon() {
 function BestSellers() {
     return (
         <section id="shop" className="bg-bone">
-            <div className="mx-auto max-w-6xl px-6 pt-24 pb-24 sm:pt-28 sm:pb-32">
+            <div className="mx-auto max-w-6xl px-6 pt-12 pb-24 sm:pt-14 sm:pb-32">
                 <div className="sw-reveal text-center">
                     <p className="font-display text-[clamp(1.9rem,4.6vw,3.1rem)] leading-[1.12]">
                         Four lines. One wardrobe.
