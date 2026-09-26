@@ -66,7 +66,7 @@ function Hero() {
                 className="absolute inset-0 -z-10 hidden md:block"
                 style={{
                     background:
-                        'linear-gradient(180deg, rgba(39,24,20,0) 28%, rgba(45,20,30,0.42) 54%, rgba(42,16,26,0.80) 74%, rgba(34,10,20,0.94) 100%)',
+                        'linear-gradient(180deg, rgba(253,240,245,0) 32%, rgba(253,240,245,0.26) 58%, rgba(253,240,245,0.62) 80%, rgba(253,240,245,0.82) 100%)',
                 }}
             />
 
@@ -76,7 +76,7 @@ function Hero() {
                         Softwife Lifestyle — affirmation apparel for women
                     </h1>
 
-                    <p className="font-display text-wine md:text-butter text-[clamp(1.45rem,6vw,2.8rem)] leading-[1.2] italic">
+                    <p className="font-display text-wine text-[clamp(1.45rem,6vw,2.8rem)] leading-[1.2] italic">
                         in my soft era
                     </p>
 
@@ -89,7 +89,7 @@ function Hero() {
                         </a>
                         <a
                             href="#story"
-                            className="text-wine border-wine/40 hover:bg-wine md:text-butter md:border-butter/55 md:hover:bg-butter flex-1 rounded-full border px-6 py-3.5 text-center text-sm font-semibold whitespace-nowrap transition duration-300 hover:text-white focus-visible:ring-4 focus-visible:ring-white/60 focus-visible:outline-none sm:flex-none sm:px-9 sm:py-4 md:hover:text-[var(--color-wine)]"
+                            className="text-wine border-wine/45 hover:bg-wine flex-1 rounded-full border bg-white/45 px-6 py-3.5 text-center text-sm font-semibold whitespace-nowrap backdrop-blur-sm transition duration-300 hover:text-white focus-visible:ring-4 focus-visible:ring-white/70 focus-visible:outline-none sm:flex-none sm:px-9 sm:py-4"
                         >
                             Our story
                         </a>
