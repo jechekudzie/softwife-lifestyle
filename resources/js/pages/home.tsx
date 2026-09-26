@@ -39,7 +39,7 @@ import {
  */
 function Hero() {
     return (
-        <section className="relative isolate flex min-h-[40rem] items-end overflow-hidden lg:h-[100svh] lg:min-h-[44rem]">
+        <section className="relative isolate flex min-h-[34rem] items-end overflow-hidden md:h-[min(55vw,92svh)] md:min-h-[32rem]">
             <picture className="absolute inset-0 -z-20">
                 <source
                     media="(min-width: 768px)"
@@ -60,7 +60,7 @@ function Hero() {
                      * to drop the faces clear of the floating nav without
                      * closing in on anyone.
                      */
-                    className="h-full w-full origin-top scale-[1.04] object-cover md:scale-100"
+                    className="h-full w-full origin-top scale-[1.03] object-cover md:scale-100"
                     style={{
                         objectPosition: '50% 0%',
                         filter: 'saturate(1.04)',
@@ -84,7 +84,7 @@ function Hero() {
                 }}
             />
 
-            <div className="relative flex w-full flex-col items-center px-6 pt-32 pb-10 text-center sm:px-12 md:pt-40 md:pb-12 lg:pb-14">
+            <div className="relative flex w-full flex-col items-center px-6 pt-28 pb-9 text-center sm:px-12 md:pt-32 md:pb-10 lg:pb-12">
                 <div className="sw-rise flex flex-col items-center">
                     <h1 className="sr-only">
                         Softwife Lifestyle — affirmation apparel for women
