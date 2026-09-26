@@ -228,7 +228,7 @@ export default function ShopIndex({
 
                         <p className="text-choc/65 mt-6 max-w-[36em] text-sm leading-[1.9]">
                             Every piece carries an affirmation for the season
-                            you are in. Heavyweight cotton, printed in small
+                            you are in — heavyweight cotton, printed in small
                             runs, made to be lived in rather than saved.
                         </p>
                     </div>

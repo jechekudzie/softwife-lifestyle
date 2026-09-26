@@ -182,6 +182,14 @@ export const RITUAL = [
     },
 ];
 
+/**
+ * Customer voices.
+ *
+ * These are written, not collected. They are kept here as the shape and
+ * length a real one should take, and the section that renders them is off
+ * until the first genuine ones arrive — a shop that invents its own reviews
+ * is lying to the people it most needs to trust it.
+ */
 export const REVIEWS = [
     {
         quote: 'I bought the Soft Wife tee in my hardest season. Reading those words on myself every morning changed how I spoke to myself. It is more than a t-shirt.',

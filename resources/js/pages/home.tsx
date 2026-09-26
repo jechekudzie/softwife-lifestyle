@@ -103,6 +103,9 @@ function Hero() {
 /** The marquee is parked until the brand wants it back. */
 const SHOW_RIBBON = false;
 
+/** Off until real customers have said something. See REVIEWS. */
+const SHOW_REVIEWS = false;
+
 function Ribbon() {
     const strip = [...RIBBON, ...RIBBON, ...RIBBON];
 
@@ -454,7 +457,7 @@ export default function Home({
 
                 <Ritual />
 
-                <Reviews />
+                {SHOW_REVIEWS ? <Reviews /> : null}
 
                 <section
                     id="affirmations"
